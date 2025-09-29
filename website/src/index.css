@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Cyberpunk Portfolio Design System */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 5% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 271 91% 65%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 215 28% 17%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 176 100% 44%;
+    --accent-foreground: 240 10% 3.9%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 271 91% 65%;
+
+    --radius: 0.75rem;
+
+    /* Custom Portfolio Colors */
+    --neon-blue: 199 100% 50%;
+    --neon-purple: 271 91% 65%;
+    --neon-cyan: 176 100% 44%;
+    --neon-pink: 320 100% 50%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(271 91% 65%) 0%, hsl(199 100% 50%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(176 100% 44%) 0%, hsl(271 91% 65%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(240 10% 3.9%) 0%, hsl(240 5% 6%) 100%);
+    
+    /* Glow Effects */
+    --glow-primary: 0 0 20px hsl(271 91% 65% / 0.5);
+    --glow-accent: 0 0 20px hsl(176 100% 44% / 0.5);
+    --glow-blue: 0 0 20px hsl(199 100% 50% / 0.5);
+    
+    /* Glass Effects */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: 10px;
+    
+    --sidebar-background: 240 10% 3.9%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 271 91% 65%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 215 28% 17%;
+    --sidebar-ring: 271 91% 65%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background: var(--gradient-dark);
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  /* Glass morphism effects */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+  }
+  
+  .glass-card {
+    @apply glass rounded-2xl p-6 transition-all duration-300;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  .glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), var(--glow-primary);
+  }
+  
+  /* Neon glow effects */
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+  
+  .glow-accent {
+    box-shadow: var(--glow-accent);
+  }
+  
+  .glow-blue {
+    box-shadow: var(--glow-blue);
+  }
+  
+  /* Gradient backgrounds */
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .bg-gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+  
+  /* Animated gradient text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+  }
+  
+  /* Floating animation */
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .float-delayed {
+    animation: float 3s ease-in-out infinite 1.5s;
+  }
+  
+  /* Pulse glow */
+  .pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  
+  /* Loading bar */
+  .loading-bar {
+    background: var(--gradient-primary);
+    height: 4px;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px hsl(271 91% 65% / 0.5);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 40px hsl(271 91% 65% / 0.8);
+    transform: scale(1.05);
+  }
+}
+
+/* Add to your main CSS file */
+@font-face {
+  font-family: 'BankGothic Md BT';
+  src: url('/fonts/BankGothic-Md-BT.woff2') format('woff2'),
+       url('/fonts/BankGothic-Md-BT.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Add to your main CSS file */
+@font-face {
+  font-family: 'Cascadia Code';
+  src: url('/fonts/CascadiaCode-SemiBold.woff2') format('woff2'),
+       url('/fonts/CascadiaCode-SemiBold.woff') format('woff'),
+       url('/fonts/CascadiaCode-SemiBold.ttf') format('truetype');
+  font-weight: 600; /* SemiBold */
+  font-style: normal;
+  font-display: swap;
+}

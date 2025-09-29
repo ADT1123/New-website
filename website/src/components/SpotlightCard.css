@@ -1,0 +1,62 @@
+.card-spotlight {
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+}
+
+.card-spotlight::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    var(--spotlight-color, rgba(255, 255, 255, 0.25)) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 50%;
+  filter: blur(20px);
+  z-index: 1;
+}
+
+.card-spotlight:hover::before {
+  opacity: 1;
+}
+
+.card-spotlight > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Main supporter specific styles */
+.main-supporter-card::before {
+  width: 400px;
+  height: 400px;
+  filter: blur(30px);
+}
+
+.main-supporter-card:hover::before {
+  opacity: 0.6;
+}
+
+/* Enhanced glow for sponsor cards */
+.sponsor-card::before {
+  width: 250px;
+  height: 250px;
+  filter: blur(15px);
+}
+
+.sponsor-card:hover::before {
+  opacity: 0.8;
+}
+
+/* Smooth transitions for all elements */
+.card-spotlight * {
+  transition: all 0.3s ease;
+}

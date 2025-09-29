@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "ogl": "^1.0.11",
+    "postprocessing": "^6.37.8",
+    "three": "^0.180.0"
+  }
+}
