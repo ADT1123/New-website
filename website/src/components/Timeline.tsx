@@ -42,7 +42,7 @@ const Timeline = () => {
   useEffect(() => {
     // Smart device detection
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-    const isLowEnd = navigator.hardwareConcurrency <= 4 || (navigator as any).deviceMemory <= 4;
+    const isLowEnd = navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 4;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
     // Skip animations only for reduced motion preference
