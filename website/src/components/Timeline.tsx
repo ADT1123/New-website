@@ -103,8 +103,47 @@ const Timeline = () => {
           }
         );
 
-        // Skip plane animation on mobile completely for performance
-        gsap.set(planeRef.current, { opacity: 0, display: 'none' });
+        // MOBILE PLANE ANIMATION - optimized
+        if (planeRef.current && timelineRef.current) {
+          const plane = planeRef.current;
+          const timelineContainer = timelineRef.current;
+          
+          gsap.set(plane, { opacity: 0, y: 0, rotation: 0 });
+
+          // Simple fade in
+          gsap.to(plane, {
+            opacity: 1,
+            duration: 0.4,
+            delay: 0.3,
+            scrollTrigger: {
+              trigger: timelineContainer,
+              start: "top 80%",
+              toggleActions: "play none none none"
+            }
+          });
+
+          // Mobile-optimized movement - slower and smoother
+          gsap.to(plane, {
+            y: () => timelineContainer.offsetHeight - 60,
+            ease: "none",
+            scrollTrigger: {
+              trigger: timelineContainer,
+              start: "top 60%",
+              end: "bottom 60%",
+              scrub: 2, // Much slower for mobile
+              onUpdate: (self) => {
+                // Less frequent rotation updates for performance
+                if (Math.abs(self.getVelocity()) > 30) {
+                  gsap.to(plane, {
+                    rotation: self.direction === 1 ? 0 : 180,
+                    duration: 1,
+                    ease: "power1.out"
+                  });
+                }
+              }
+            }
+          });
+        }
 
       } else {
         // Desktop animations - optimized
@@ -137,12 +176,17 @@ const Timeline = () => {
           }
         );
 
-        // Desktop plane animation - simplified
+        // DESKTOP PLANE ANIMATION - smooth and optimized
         if (planeRef.current && timelineRef.current) {
           const plane = planeRef.current;
           const timelineContainer = timelineRef.current;
           
-          gsap.set(plane, { opacity: 0, y: 0, rotation: 0 });
+          gsap.set(plane, { 
+            opacity: 0, 
+            y: 0, 
+            rotation: 0,
+            willChange: "transform"
+          });
 
           gsap.to(plane, {
             opacity: 1,
@@ -162,10 +206,13 @@ const Timeline = () => {
               trigger: timelineContainer,
               start: "top 50%",
               end: "bottom 50%",
-              scrub: 1,
+              scrub: 0.8,
               onUpdate: (self) => {
-                gsap.set(plane, {
-                  rotation: self.direction === 1 ? 0 : 180
+                const targetRotation = self.direction === 1 ? 0 : 180;
+                gsap.to(plane, {
+                  rotation: targetRotation,
+                  duration: 0.6,
+                  ease: "power2.out"
                 });
               }
             }
@@ -208,9 +255,12 @@ const Timeline = () => {
         });
       }
 
-      // Skip all complex animations (badges, titles, descriptions) for performance
-      // Skip all particle animations completely
-      // Skip all hover effects for mobile
+      // Cleanup
+      return () => {
+        if (planeRef.current) {
+          gsap.set(planeRef.current, { willChange: "auto" });
+        }
+      };
 
     }, sectionRef);
 
@@ -250,24 +300,29 @@ const Timeline = () => {
           {/* Minimal Timeline Line */}
           <div className="timeline-line absolute left-6 md:left-1/2 top-0 w-px h-full bg-gradient-to-b from-white/20 via-white/15 to-white/20 md:transform md:-translate-x-1/2"></div>
 
-          {/* Simplified Plane - hidden on mobile */}
+          {/* OPTIMIZED PLANE - now shows on mobile too */}
           <div 
             ref={planeRef}
-            className="absolute left-6 md:left-1/2 top-0 transform -translate-x-1/2 z-30 pointer-events-none hidden md:block"
+            className="absolute left-6 md:left-1/2 top-0 transform -translate-x-1/2 z-30 pointer-events-none"
           >
-            <svg 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              className="text-white/80 transform rotate-180"
-            >
-              <path 
-                d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" 
-                fill="currentColor"
-              />
-            </svg>
+            <div className="relative">
+              <svg 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-white/85 transform rotate-180 md:w-6 md:h-6"
+              >
+                <path 
+                  d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" 
+                  fill="currentColor"
+                />
+              </svg>
+              
+              {/* Light trail - desktop only */}
+              <div className="hidden md:block absolute -top-1 -left-1 w-4 h-4 bg-white/8 rounded-full blur-sm opacity-50"></div>
+            </div>
           </div>
 
           <div className="space-y-8 md:space-y-20">
