@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import AerospaceBackground from './AerospaceBackground';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +18,6 @@ const Timeline = () => {
       title: "AUVSI SUAS 2019",
       description: "We Participated for the fourth time in the 17th AUVSI SUAS 2019 with our Hexa-Copter.",
       highlight: "4th rank Worldwide in Flight Readiness Review and 3rd among all Indian teams.",
-      // Temporary: Using a working placeholder or remove logo field
       logo: "/img/NMIMS_LOGO1.png" 
     },
     {
@@ -25,21 +25,18 @@ const Timeline = () => {
       title: "AUVSI SUAS 2018",
       description: "We participated for the third time in the 16th AUVSI SUAS 2018 with our hexa-copter. Over 75 teams from all across the globe participated.",
       highlight: "We secured 5th rank Worldwide and 1st among all Indian teams.",
-      // logo: "/img/logos/auvsi-2018.png"
     },
     {
       year: "2017",
       title: "AUVSI SUAS 2017", 
       description: "We participated for the second time in competition with our new drone SkyKing'17. 56 teams from all across the globe participated.",
       highlight: "We secured a Mission Rank 28 at the competition.",
-      // logo: "/img/logos/auvsi-2017.png"
     },
     {
       year: "2016",
       title: "AUVSI SUAS 2016",
       description: "We participated in the AUVSI SUAS 2016 competition held in Maryland, USA with our drone Scylla 2K16.",
       highlight: "We secured a Mission Rank 5 at the competition and 3rd among all Indian Teams.",
-      // logo: "/img/logos/auvsi-2016.png"
     }
   ];
 
@@ -79,59 +76,48 @@ const Timeline = () => {
         }
       );
 
-      // Enhanced plane animation - no floating, smoother scroll
-// Enhanced plane animation - no floating, smoother scroll
-// Enhanced plane animation - no floating, smoother scroll
-// Enhanced plane animation - no floating, smoother scroll
-if (planeRef.current && timelineRef.current) {
-  const plane = planeRef.current;
-  const timelineContainer = timelineRef.current;
-  
-  // Create a quickTo function for super smooth rotation performance
-  const rotatePlane = gsap.quickTo(plane, "rotation", {
-    duration: 0.6,
-    ease: "power2.out"
-  });
-  
-  // Initial plane setup - starts upside down (facing down) due to rotate-180 in SVG
-  gsap.set(plane, {
-    opacity: 0,
-    y: 0,
-    rotation: 0 // Keep initial upside down orientation (facing down)
-  });
+      // Enhanced plane animation
+      if (planeRef.current && timelineRef.current) {
+        const plane = planeRef.current;
+        const timelineContainer = timelineRef.current;
+        
+        const rotatePlane = gsap.quickTo(plane, "rotation", {
+          duration: 0.6,
+          ease: "power2.out"
+        });
+        
+        gsap.set(plane, {
+          opacity: 0,
+          y: 0,
+          rotation: 0
+        });
 
-  // Plane fade in first
-  gsap.to(plane, {
-    opacity: 1,
-    duration: 0.6,
-    delay: 1,
-    scrollTrigger: {
-      trigger: timelineContainer,
-      start: "top 70%",
-      toggleActions: "play none none reverse"
-    }
-  });
+        gsap.to(plane, {
+          opacity: 1,
+          duration: 0.6,
+          delay: 1,
+          scrollTrigger: {
+            trigger: timelineContainer,
+            start: "top 70%",
+            toggleActions: "play none none reverse"
+          }
+        });
 
-  // Super smooth plane follows scroll down the timeline
-  gsap.to(plane, {
-    y: () => timelineContainer.offsetHeight - 80, // Move to bottom of timeline
-    ease: "none",
-    scrollTrigger: {
-      trigger: timelineContainer,
-      start: "top 50%",
-      end: "bottom 50%",
-      scrub: 0.5, // Much smoother scroll following
-      onUpdate: (self) => {
-        // Super smooth rotation using quickTo for performance
-        const targetRotation = self.direction === 1 ? 0 : 180;
-        rotatePlane(targetRotation);
+        gsap.to(plane, {
+          y: () => timelineContainer.offsetHeight - 80,
+          ease: "none",
+          scrollTrigger: {
+            trigger: timelineContainer,
+            start: "top 50%",
+            end: "bottom 50%",
+            scrub: 0.5,
+            onUpdate: (self) => {
+              const targetRotation = self.direction === 1 ? 0 : 180;
+              rotatePlane(targetRotation);
+            }
+          }
+        });
       }
-    }
-  });
-}
-
-
-
 
       // Timeline items fade in with stagger
       gsap.fromTo(".timeline-item",
@@ -150,14 +136,11 @@ if (planeRef.current && timelineRef.current) {
         }
       );
 
-      // Individual text elements fade in on scroll
+      // Individual text elements animations
       gsap.utils.toArray(".fade-in-text").forEach((element, index) => {
         return gsap.fromTo(
           element as HTMLElement,
-          {
-            opacity: 0,
-            y: 20
-          },
+          { opacity: 0, y: 20 },
           {
             opacity: 1,
             y: 0,
@@ -176,10 +159,7 @@ if (planeRef.current && timelineRef.current) {
       // Year badges fade in
       gsap.utils.toArray(".year-badge").forEach((badge) => {
         return gsap.fromTo(badge as Element,
-          {
-            opacity: 0,
-            scale: 0.8
-          },
+          { opacity: 0, scale: 0.8 },
           {
             opacity: 1,
             scale: 1,
@@ -194,13 +174,10 @@ if (planeRef.current && timelineRef.current) {
         );
       });
 
-      // Card titles fade in
+      // Card animations
       gsap.utils.toArray(".card-title").forEach((title) => {
         return gsap.fromTo(title as HTMLElement,
-          {
-            opacity: 0,
-            x: -20
-          },
+          { opacity: 0, x: -20 },
           {
             opacity: 1,
             x: 0,
@@ -215,13 +192,9 @@ if (planeRef.current && timelineRef.current) {
         );
       });
 
-      // Card descriptions fade in
       gsap.utils.toArray(".card-description").forEach((desc) => {
         return gsap.fromTo(desc as HTMLElement,
-          {
-            opacity: 0,
-            y: 15
-          },
+          { opacity: 0, y: 15 },
           {
             opacity: 1,
             y: 0,
@@ -237,13 +210,9 @@ if (planeRef.current && timelineRef.current) {
         );
       });
 
-      // Card highlights fade in
       gsap.utils.toArray(".card-highlight").forEach((highlight) => {
         return gsap.fromTo(highlight as HTMLElement,
-          {
-            opacity: 0,
-            x: -15
-          },
+          { opacity: 0, x: -15 },
           {
             opacity: 1,
             x: 0,
@@ -259,13 +228,9 @@ if (planeRef.current && timelineRef.current) {
         );
       });
 
-      // Year circles fade in
       gsap.utils.toArray(".year-circle").forEach((circle) => {
         return gsap.fromTo(circle as Element,
-          {
-            opacity: 0,
-            scale: 0
-          },
+          { opacity: 0, scale: 0 },
           {
             opacity: 1,
             scale: 1,
@@ -280,7 +245,7 @@ if (planeRef.current && timelineRef.current) {
         );
       });
 
-      // Simple fade hover for cards
+      // Card hover effects
       gsap.utils.toArray(".timeline-card").forEach((card) => {
         const cardEl = card as Element;
         
@@ -311,135 +276,14 @@ if (planeRef.current && timelineRef.current) {
         });
       });
 
-      // Minimal blinking stars animation
-      gsap.to(".blink-star", {
-        opacity: "random(0.2, 0.8)",
-        duration: "random(2, 5)",
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        stagger: 1
-      });
-
-      // Subtle floating particles
-      gsap.to(".float-particle", {
-        y: "random(-8, 8)",
-        x: "random(-6, 6)",
-        duration: "random(6, 10)",
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        stagger: 2
-      });
-
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div 
-      ref={sectionRef}
-      className="min-h-screen py-12 md:py-20 px-4 relative overflow-hidden"
-      style={{ 
-        background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%)',
-        fontFamily: '"Inter", "SF Pro Display", -apple-system, sans-serif'
-      }}
-      id="Timeline"
-    >
-      {/* Clean Background with More Stars & Particles */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        
-        {/* Gradient depth layers */}
-        <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white/[0.04] via-white/[0.02] to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white/[0.035] via-white/[0.018] to-transparent"></div>
-        <div className="absolute top-0 left-0 w-40 h-full bg-gradient-to-r from-white/[0.025] via-white/[0.012] to-transparent"></div>
-        <div className="absolute top-0 right-0 w-40 h-full bg-gradient-to-l from-white/[0.03] via-white/[0.015] to-transparent"></div>
-
-        {/* Corner depth gradients */}
-        <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-white/[0.06] via-white/[0.02] to-transparent blur-3xl"></div>
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-white/[] via-white/[0.018] to-transparent blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-white/[0.055] via-white/[0.022] to-transparent blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-white/[0.045] via-white/[0.02] to-transparent blur-3xl"></div>
-
-        {/* Center depth layers */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-white/[0.04] via-transparent to-white/[0.02] blur-2xl"></div>
-        <div className="absolute top-1/3 right-1/3 w-72 h-72 bg-gradient-to-bl from-white/[0.045] via-transparent to-white/[0.025] blur-2xl"></div>
-        <div className="absolute bottom-1/3 left-1/2 w-64 h-64 bg-gradient-to-tr from-white/[0.035] via-transparent to-white/[0.018] blur-2xl"></div>
-
-        {/* More Blinking Stars - Well distributed */}
-        <div className="blink-star absolute w-1 h-1 bg-white rounded-full top-[8%] left-[5%] opacity-40"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-blue-200 rounded-full top-[12%] right-[8%] opacity-45"></div>
-        <div className="blink-star absolute w-1 h-1 bg-white rounded-full top-[18%] left-[92%] opacity-38"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-purple-200 rounded-full top-[24%] right-[15%] opacity-42"></div>
-        <div className="blink-star absolute w-1 h-1 bg-white rounded-full top-[30%] left-[12%] opacity-45"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-cyan-200 rounded-full top-[36%] right-[88%] opacity-40"></div>
-        <div className="blink-star absolute w-1 h-1 bg-white rounded-full top-[42%] left-[3%] opacity-48"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-white rounded-full top-[48%] right-[6%] opacity-35"></div>
-        <div className="blink-star absolute w-1 h-1 bg-blue-200 rounded-full top-[54%] left-[95%] opacity-42"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-white rounded-full top-[60%] right-[12%] opacity-40"></div>
-        <div className="blink-star absolute w-1 h-1 bg-purple-200 rounded-full top-[66%] left-[8%] opacity-38"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-white rounded-full top-[72%] right-[85%] opacity-45"></div>
-        <div className="blink-star absolute w-1 h-1 bg-cyan-200 rounded-full top-[78%] left-[90%] opacity-42"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-white rounded-full top-[84%] right-[4%] opacity-40"></div>
-        <div className="blink-star absolute w-1 h-1 bg-white rounded-full bottom-[20%] left-[7%] opacity-48"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-blue-200 rounded-full bottom-[26%] right-[9%] opacity-35"></div>
-        <div className="blink-star absolute w-1 h-1 bg-white rounded-full bottom-[32%] left-[93%] opacity-42"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-purple-200 rounded-full bottom-[38%] right-[14%] opacity-40"></div>
-        <div className="blink-star absolute w-1 h-1 bg-white rounded-full bottom-[44%] left-[4%] opacity-35"></div>
-        <div className="blink-star absolute w-0.5 h-0.5 bg-cyan-200 rounded-full bottom-[15%] right-[11%] opacity-42"></div>
-
-        {/* Way More Floating Particles - Random distribution */}
-        <div className="float-particle absolute w-2 h-2 bg-white/20 rounded-full top-[10%] left-[18%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-blue-300/15 rounded-full top-[14%] right-[25%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-purple-300/18 rounded-full top-[22%] left-[75%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-white/16 rounded-full top-[28%] right-[42%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-cyan-300/20 rounded-full top-[34%] left-[28%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-white/22 rounded-full top-[40%] right-[68%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-blue-300/17 rounded-full top-[46%] left-[82%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-purple-300/19 rounded-full top-[52%] right-[15%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-white/18 rounded-full top-[58%] left-[35%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-cyan-300/16 rounded-full top-[64%] right-[55%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-white/21 rounded-full top-[70%] left-[65%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-blue-300/18 rounded-full top-[76%] right-[32%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-purple-300/17 rounded-full top-[82%] left-[22%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-white/19 rounded-full top-[88%] right-[78%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-cyan-300/20 rounded-full bottom-[22%] left-[45%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-white/17 rounded-full bottom-[28%] right-[28%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-blue-300/19 rounded-full bottom-[34%] left-[72%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-purple-300/16 rounded-full bottom-[40%] right-[48%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-white/20 rounded-full bottom-[46%] left-[15%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-cyan-300/18 rounded-full bottom-[52%] right-[65%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-white/16 rounded-full bottom-[58%] left-[88%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-blue-300/21 rounded-full bottom-[64%] right-[18%] blur-sm"></div>
-        <div className="float-particle absolute w-2 h-2 bg-purple-300/18 rounded-full bottom-[70%] left-[38%] blur-sm"></div>
-        <div className="float-particle absolute w-1.5 h-1.5 bg-white/17 rounded-full bottom-[76%] right-[85%] blur-sm"></div>
-        
-        {/* Additional smaller particles for density */}
-        <div className="float-particle absolute w-1 h-1 bg-white/25 rounded-full top-[16%] left-[52%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-blue-200/20 rounded-full top-[26%] right-[58%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-white/23 rounded-full top-[38%] left-[15%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-purple-200/22 rounded-full top-[44%] right-[35%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-cyan-200/24 rounded-full top-[56%] left-[68%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-white/21 rounded-full top-[68%] right-[22%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-blue-200/19 rounded-full top-[74%] left-[42%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-white/26 rounded-full top-[86%] right-[62%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-purple-200/20 rounded-full bottom-[24%] left-[58%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-white/22 rounded-full bottom-[36%] right-[38%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-cyan-200/23 rounded-full bottom-[48%] left-[25%] blur-sm"></div>
-        <div className="float-particle absolute w-1 h-1 bg-white/20 rounded-full bottom-[62%] right-[75%] blur-sm"></div>
-
-        {/* Subtle middle section gradients */}
-        <div className="absolute top-1/2 left-0 w-full h-32 bg-gradient-to-r from-white/[0.02] via-white/[0.035] to-white/[0.02] blur-xl"></div>
-        <div className="absolute top-0 left-1/2 w-32 h-full bg-gradient-to-b from-white/[0.018] via-white/[0.032] to-white/[0.018] blur-xl"></div>
-
-        {/* Additional atmospheric layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/10 mix-blend-multiply"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.008] via-transparent to-white/[0.005] mix-blend-screen"></div>
-
-      </div>
-
-      <div className="max-w-5xl mx-auto relative z-10">
+    <AerospaceBackground className="min-h-screen py-12 md:py-20 px-4" id="Timeline">
+      <div ref={sectionRef} className="max-w-5xl mx-auto relative z-10">
         {/* Enhanced Title */}
         <div className="text-center mb-12 md:mb-20">
           <h2 
@@ -461,7 +305,6 @@ if (planeRef.current && timelineRef.current) {
             className="absolute left-6 md:left-1/2 top-0 transform -translate-x-1/2 z-30 pointer-events-none"
           >
             <div className="relative">
-              {/* Bigger Upside Down Plane SVG Icon */}
               <svg 
                 width="32" 
                 height="32" 
@@ -476,7 +319,6 @@ if (planeRef.current && timelineRef.current) {
                 />
               </svg>
               
-              {/* Enhanced glowing trail behind plane */}
               <div className="absolute -top-2 -left-2 w-8 h-8 bg-white/15 rounded-full blur-lg opacity-50"></div>
               <div className="absolute -top-1 -left-1 w-6 h-6 bg-white/25 rounded-full blur-md opacity-70"></div>
             </div>
@@ -516,31 +358,28 @@ if (planeRef.current && timelineRef.current) {
                     <div className="absolute top-5 right-5 md:top-6 md:right-6">
                       <div className="w-12 h-12 md:w-16 md:h-16 bg-white/5 rounded-xl flex items-center justify-center overflow-hidden hover:bg-white/10 transition-all duration-300">
 
-                        {/* Logo icon placeholder */}
-                    {achievement.logo ? (
-                      <img 
-                        src={achievement.logo}
-                        alt={`${achievement.title} logo`}
-                        className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
-                        onError={(e) => {
-                          // If image fails, show fallback
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          if (target.parentElement) {
-                            target.parentElement.innerHTML = `
-                              <div class="text-white/40 text-xs font-medium text-center">
-                                ${achievement.year}
-                              </div>
-                            `;
-                          }
-                        }}
-                      />
-                    ) : (
-                      // Fallback icon if no logo
-                      <svg className="w-6 h-6 md:w-8 md:h-8 text-white/40" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                      </svg>
-                    )}
+                        {achievement.logo ? (
+                          <img 
+                            src={achievement.logo}
+                            alt={`${achievement.title} logo`}
+                            className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              if (target.parentElement) {
+                                target.parentElement.innerHTML = `
+                                  <div class="text-white/40 text-xs font-medium text-center">
+                                    ${achievement.year}
+                                  </div>
+                                `;
+                              }
+                            }}
+                          />
+                        ) : (
+                          <svg className="w-6 h-6 md:w-8 md:h-8 text-white/40" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                          </svg>
+                        )}
 
                       </div>
                     </div>
@@ -581,7 +420,7 @@ if (planeRef.current && timelineRef.current) {
 
         <div className="h-12 md:h-16"></div>
       </div>
-    </div>
+    </AerospaceBackground>
   );
 };
 
