@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { List, X } from 'phosphor-react';
+import { X } from 'phosphor-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
@@ -12,7 +12,6 @@ const Navigation = () => {
   const navItems = [
     { name: 'Home', href: '/', isPage: true },
     { name: 'Achievements', href: '/#Timeline', isPage: false },
-    //{ name: 'About', href: '/#about', isPage: false },
     { name: 'Projects', href: '/projects', isPage: true },
     { name: 'Contact', href: '/contact', isPage: true },
     { name: 'Sponsors', href: '/sponsors', isPage: true },
@@ -29,13 +28,36 @@ const Navigation = () => {
 
   useEffect(() => {
     if (isOpen) {
-      gsap.fromTo('.mobile-menu', 
-        { opacity: 0, x: '100%' },
-        { opacity: 1, x: '0%', duration: 0.4, ease: 'power3.out' }
+      // Animate square popup opening
+      gsap.fromTo('.mobile-menu-popup', 
+        { 
+          opacity: 0, 
+          scale: 0.8,
+          y: -20,
+          rotationY: -15 
+        },
+        { 
+          opacity: 1, 
+          scale: 1,
+          y: 0,
+          rotationY: 0,
+          duration: 0.5, 
+          ease: 'back.out(1.7)' 
+        }
       );
+      
+      // Stagger menu items
       gsap.fromTo('.mobile-nav-item',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.3, stagger: 0.1, delay: 0.2 }
+        { opacity: 0, y: 20, x: -30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          x: 0,
+          duration: 0.4, 
+          stagger: 0.08, 
+          delay: 0.3,
+          ease: 'power2.out'
+        }
       );
     }
   }, [isOpen]);
@@ -62,21 +84,68 @@ const Navigation = () => {
     setIsOpen(false);
   };
 
+  // Animated hamburger button component
+  const AnimatedHamburger = ({ isOpen, onClick }: { isOpen: boolean, onClick: () => void }) => {
+    return (
+      <button
+        onClick={onClick}
+        className="md:hidden w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex flex-col items-center justify-center hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 z-10 group overflow-hidden"
+        aria-label="Toggle menu"
+      >
+        <div className="relative w-6 h-5 flex flex-col justify-between">
+          <span className={`
+            h-0.5 bg-white rounded-full transition-all duration-300 ease-in-out transform-gpu
+            ${isOpen 
+              ? 'rotate-45 translate-y-2 w-6' 
+              : 'rotate-0 translate-y-0 w-6 group-hover:w-7'
+            }
+          `}></span>
+          
+          <span className={`
+            h-0.5 bg-white rounded-full transition-all duration-300 ease-in-out transform-gpu
+            ${isOpen 
+              ? 'opacity-0 scale-0' 
+              : 'opacity-100 scale-100 w-5 group-hover:w-6'
+            }
+          `}></span>
+          
+          <span className={`
+            h-0.5 bg-white rounded-full transition-all duration-300 ease-in-out transform-gpu
+            ${isOpen 
+              ? '-rotate-45 -translate-y-2 w-6' 
+              : 'rotate-0 translate-y-0 w-4 group-hover:w-5'
+            }
+          `}></span>
+        </div>
+
+        <div className={`
+          absolute inset-0 rounded-xl bg-white/20 transform scale-0 transition-transform duration-300
+          ${isOpen ? 'scale-100' : 'scale-0'}
+        `}></div>
+      </button>
+    );
+  };
+
   return (
     <>
-      {/* Clean Navigation */}
-        <nav className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 shadow-lg ${
-
+      {/* Navigation */}
+      <nav 
+        className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 ${
           scrolled 
-            ? 'bg-black/95 backdrop-blur-xl border-b border-white/20 shadow-black/30' 
-            : 'bg-black/75 backdrop-blur-md shadow-black/20'
-        }`}>
-
-
-        <div className="max-w-7xl mx-auto px-6 py-4">
+            ? 'bg-black/95 backdrop-blur-xl border-b border-white/20' 
+            : 'bg-black/75 backdrop-blur-md'
+        }`}
+        style={{
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden',
+          WebkitTransform: 'translate3d(0,0,0)',
+          transform: 'translate3d(0,0,0)'
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
           <div className="flex justify-between items-center">
             
-            {/* Simple Logo */}
+            {/* Logo */}
             <Link 
               to="/"
               className="group flex items-center space-x-3 z-10"
@@ -84,12 +153,11 @@ const Navigation = () => {
               <img 
                 src="/img/LOGO5.png" 
                 alt="Team UAS Logo" 
-                className="h-24 md:h-16 transition-transform duration-300 group-hover:scale-110" 
-
+                className="h-16 md:h-16 transition-transform duration-300 group-hover:scale-110" 
               />
             </Link>
 
-            {/* Clean Desktop Menu */}
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8 z-10">
               {navItems.map((item) => (
                 item.isPage ? (
@@ -101,8 +169,6 @@ const Navigation = () => {
                     }`}
                   >
                     <span>{item.name}</span>
-                    
-                    {/* Simple underline */}
                     <div className={`absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 ${
                       location.pathname === item.href ? 'w-full' : 'w-0 group-hover:w-full'
                     }`}></div>
@@ -114,85 +180,106 @@ const Navigation = () => {
                     className="relative text-white/80 hover:text-white transition-all duration-300 font-medium text-sm uppercase tracking-wide group"
                   >
                     <span>{item.name}</span>
-                    
-                    {/* Simple underline */}
                     <div className="absolute bottom-0 left-0 w-0 group-hover:w-full h-0.5 bg-white transition-all duration-300"></div>
                   </button>
                 )
               ))}
             </div>
 
-            {/* Simple Mobile Button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden w-10 h-10 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all duration-300 z-10"
-            >
-              <List size={18} className="text-white" />
-            </button>
+            {/* Animated Mobile Hamburger Button */}
+            <AnimatedHamburger isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
           </div>
         </div>
       </nav>
 
-      {/* Clean Mobile Menu */}
+      {/* Square Mobile Menu Popup */}
       {isOpen && (
-        <div className="fixed inset-0 z-[10000] md:hidden">
+        <div className="fixed inset-0 z-[10000] md:hidden flex items-start justify-end p-4 pt-20">
+          {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
+            style={{
+              animation: 'fadeIn 0.3s ease-out'
+            }}
           ></div>
           
-          <div className="mobile-menu absolute right-0 top-0 h-full w-72 max-w-full bg-black/95 backdrop-blur-xl border-l border-white/20">
+          {/* Square Menu Container */}
+          <div className="mobile-menu-popup relative w-72 sm:w-80 bg-gradient-to-br from-black/95 via-gray-900/95 to-black/95 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl">
             
-            {/* Simple Header */}
-            <div className="p-6 border-b border-white/10">
-              <div className="flex justify-between items-center">
+            {/* Header */}
+            <div className="p-6 border-b border-white/10 flex justify-between items-center">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="/img/LOGO5.png" 
+                  alt="Team UAS Logo" 
+                  className="h-8 w-auto" 
+                />
                 <span className="text-white font-semibold text-lg">Menu</span>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors duration-300"
-                >
-                  <X size={16} className="text-white" />
-                </button>
               </div>
+              
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-white/20 hover:scale-110 active:scale-95 transition-all duration-300 group"
+              >
+                <X size={16} className="text-white group-hover:rotate-90 transition-transform duration-300" />
+              </button>
             </div>
 
-            {/* Simple Navigation Items */}
-            <nav className="p-6 space-y-4">
-              {navItems.map((item) => (
-                item.isPage ? (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`mobile-nav-item block py-3 px-4 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300 ${
-                      location.pathname === item.href ? 'bg-white/10 text-white' : ''
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                ) : (
-                  <button
-                    key={item.name}
-                    onClick={() => handleNavClick(item.href, item.isPage)}
-                    className="mobile-nav-item block w-full text-left py-3 px-4 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300"
-                  >
-                    {item.name}
-                  </button>
-                )
+            {/* Navigation Items */}
+            <nav className="p-4 space-y-1">
+              {navItems.map((item, index) => (
+                <div key={item.name} className="mobile-nav-item">
+                  {item.isPage ? (
+                    <Link
+                      to={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`
+                        group relative block py-3 px-4 text-white/80 hover:text-white hover:bg-white/10 rounded-2xl transition-all duration-300 border border-transparent hover:border-white/15
+                        ${location.pathname === item.href ? 'bg-white/10 text-white border-white/20' : ''}
+                      `}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{item.name}</span>
+                        <div className="w-0 group-hover:w-4 h-0.5 bg-white/40 transition-all duration-300 rounded-full"></div>
+                      </div>
+                      
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => handleNavClick(item.href, item.isPage)}
+                      className="group relative w-full text-left py-3 px-4 text-white/80 hover:text-white hover:bg-white/10 rounded-2xl transition-all duration-300 border border-transparent hover:border-white/15"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{item.name}</span>
+                        <div className="w-0 group-hover:w-4 h-0.5 bg-white/40 transition-all duration-300 rounded-full"></div>
+                      </div>
+                      
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </button>
+                  )}
+                </div>
               ))}
             </nav>
 
-            {/* Simple Footer */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
+            {/* Footer */}
+            <div className="p-4 pt-2 border-t border-white/10 mt-2">
               <div className="text-center">
-                <p className="text-sm text-white/60">
-                  Team UAS
-                </p>
+                <p className="text-xs text-white/60">Team UAS NMIMS</p>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* CSS Animations */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </>
   );
 };
