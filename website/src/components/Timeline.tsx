@@ -40,61 +40,64 @@ const Timeline = () => {
   ];
 
   useEffect(() => {
-    // Enhanced device detection for better optimization
+    // Smart device detection
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
     const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
-    const isLowEnd = navigator.hardwareConcurrency <= 4 || (navigator as any).deviceMemory <= 4;
-    const isSlowDevice = isLowEnd || (isMobile && window.devicePixelRatio > 2);
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
-    // Skip all animations for reduced motion or very slow devices
-    if (prefersReducedMotion || (isSlowDevice && isMobile)) {
-      gsap.set([titleRef.current, ".timeline-item", ".timeline-line", planeRef.current], { 
-        opacity: 1,
-        clearProps: "all"
-      });
+    // Skip only for reduced motion
+    if (prefersReducedMotion) {
+      gsap.set([titleRef.current, ".timeline-item", ".timeline-line", planeRef.current], { opacity: 1 });
       return;
     }
 
     const ctx = gsap.context(() => {
-      // Ultra-light GSAP config for slower systems
+      // Performance-optimized GSAP config
       gsap.set(gsap.config(), { 
-        force3D: isSlowDevice ? false : true, // Disable 3D for slow devices
-        nullTargetWarn: false,
-        autoSleep: 60
+        force3D: true,
+        nullTargetWarn: false
       });
 
-      // Performance-based animation settings
-      const getAnimationSettings = () => {
+      // Device-specific animation settings
+      const getSettings = () => {
         if (isMobile) {
           return {
-            duration: isSlowDevice ? 0.3 : 0.5,
-            stagger: 0.05,
-            ease: "power1.out",
-            scrubSpeed: 3
+            duration: 0.6,
+            stagger: 0.08,
+            ease: "power2.out",
+            scrubSpeed: 1.2,
+            planeOpacity: 0.95,
+            planeSize: "w-7 h-7",
+            glowIntensity: 0.15
           };
         } else if (isTablet) {
           return {
             duration: 0.7,
-            stagger: 0.1,
+            stagger: 0.12,
             ease: "power2.out",
-            scrubSpeed: 1.5
+            scrubSpeed: 1,
+            planeOpacity: 1,
+            planeSize: "w-8 h-8",
+            glowIntensity: 0.2
           };
         } else {
           return {
             duration: 0.8,
             stagger: 0.15,
             ease: "power2.out",
-            scrubSpeed: 0.8
+            scrubSpeed: 0.8,
+            planeOpacity: 1,
+            planeSize: "w-9 h-9",
+            glowIntensity: 0.25
           };
         }
       };
 
-      const settings = getAnimationSettings();
+      const settings = getSettings();
 
-      // Simplified title animation
+      // Enhanced title animation
       gsap.fromTo(titleRef.current,
-        { opacity: 0, y: isMobile ? 10 : 20 },
+        { opacity: 0, y: isMobile ? 15 : 25 },
         {
           opacity: 1,
           y: 0,
@@ -103,13 +106,12 @@ const Timeline = () => {
           scrollTrigger: {
             trigger: titleRef.current,
             start: "top 90%",
-            toggleActions: "play none none none",
-            fastScrollEnd: true
+            toggleActions: "play none none none"
           }
         }
       );
 
-      // Timeline line animation
+      // Timeline line with enhanced glow
       gsap.fromTo(".timeline-line",
         { scaleY: 0, transformOrigin: "top" },
         {
@@ -119,14 +121,13 @@ const Timeline = () => {
           scrollTrigger: {
             trigger: timelineRef.current,
             start: "top 85%",
-            toggleActions: "play none none none",
-            fastScrollEnd: true
+            toggleActions: "play none none none"
           }
         }
       );
 
-      // Optimized plane animation for all devices
-      if (planeRef.current && timelineRef.current && !isSlowDevice) {
+      // ✈️ ENHANCED BIGGER PLANE WITH GLOW ANIMATION
+      if (planeRef.current && timelineRef.current) {
         const plane = planeRef.current;
         const timelineContainer = timelineRef.current;
         
@@ -134,134 +135,216 @@ const Timeline = () => {
           opacity: 0, 
           y: 0, 
           rotation: 0,
-          willChange: isMobile ? "auto" : "transform"
+          scale: 1,
+          willChange: "transform",
+          transformOrigin: "center center"
         });
 
-        // Fade in
-        gsap.to(plane, {
-          opacity: isMobile ? 0.7 : 1,
-          duration: settings.duration * 0.8,
-          delay: isMobile ? 0.2 : 0.5,
-          scrollTrigger: {
-            trigger: timelineContainer,
-            start: "top 80%",
-            toggleActions: "play none none none"
+        // Enhanced plane fade in with bounce and glow
+        gsap.fromTo(plane, 
+          { 
+            opacity: 0, 
+            scale: 0.3,
+            y: -15,
+            filter: "drop-shadow(0 0 0px rgba(255,255,255,0))"
+          },
+          {
+            opacity: settings.planeOpacity,
+            scale: 1.1,
+            y: 0,
+            filter: `drop-shadow(0 0 15px rgba(255,255,255,${settings.glowIntensity}))`,
+            duration: settings.duration * 1.2,
+            delay: isMobile ? 0.4 : 0.6,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: timelineContainer,
+              start: "top 80%",
+              toggleActions: "play none none none"
+            }
           }
-        });
+        );
 
-        // Movement animation
+        // Enhanced plane movement with glow effects
         gsap.to(plane, {
-          y: () => timelineContainer.offsetHeight - (isMobile ? 40 : 80),
+          y: () => timelineContainer.offsetHeight - (isMobile ? 60 : 90),
           ease: "none",
           scrollTrigger: {
             trigger: timelineContainer,
             start: "top 60%",
             end: "bottom 60%",
             scrub: settings.scrubSpeed,
-            onUpdate: isSlowDevice ? undefined : (self) => {
-              // Throttled rotation updates
-              if (Math.abs(self.getVelocity()) > (isMobile ? 50 : 30)) {
+            onUpdate: (self) => {
+              const velocity = Math.abs(self.getVelocity());
+              
+              if (velocity > (isMobile ? 25 : 30)) {
+                const targetRotation = self.direction === 1 ? 0 : 180;
+                const scaleEffect = 1 + (velocity * 0.003);
+                const glowEffect = Math.min(velocity * 0.01, 30);
+                
                 gsap.to(plane, {
-                  rotation: self.direction === 1 ? 0 : 180,
-                  duration: isMobile ? 0.8 : 0.6,
-                  ease: "power1.out",
-                  overwrite: "auto"
+                  rotation: targetRotation,
+                  scale: Math.min(scaleEffect, isMobile ? 1.4 : 1.3),
+                  filter: `drop-shadow(0 0 ${glowEffect}px rgba(255,255,255,${settings.glowIntensity * 2}))`,
+                  duration: isMobile ? 0.5 : 0.6,
+                  ease: "power2.out",
+                  onComplete: () => {
+                    gsap.to(plane, {
+                      scale: 1.1,
+                      filter: `drop-shadow(0 0 15px rgba(255,255,255,${settings.glowIntensity}))`,
+                      duration: 0.4,
+                      ease: "power2.out"
+                    });
+                  }
                 });
               }
             }
           }
         });
-      } else if (isSlowDevice && planeRef.current) {
-        // Static plane for very slow devices
-        gsap.set(planeRef.current, { opacity: 0.5 });
+
+        // Continuous subtle glow pulse animation
+        gsap.to(plane, {
+          filter: `drop-shadow(0 0 20px rgba(255,255,255,${settings.glowIntensity * 1.5}))`,
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+        });
       }
 
-      // Timeline items with performance optimization
+      // Timeline items with enhanced mobile animation
       gsap.fromTo(".timeline-item",
-        { opacity: 0, y: isMobile ? 15 : 25 },
+        { opacity: 0, y: isMobile ? 20 : 30, x: isMobile ? 10 : 0 },
         {
           opacity: 1,
           y: 0,
+          x: 0,
           duration: settings.duration,
           stagger: settings.stagger,
           ease: settings.ease,
           scrollTrigger: {
             trigger: timelineRef.current,
             start: "top 75%",
-            toggleActions: "play none none none",
-            batch: true, // Batch processing for performance
-            fastScrollEnd: true
+            toggleActions: "play none none none"
           }
         }
       );
 
-      // Year circles - only for non-mobile or high-performance devices
-      if (!isMobile || !isSlowDevice) {
-        gsap.fromTo(".year-circle",
-          { opacity: 0, scale: 0.7 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: settings.duration * 0.7,
-            stagger: settings.stagger,
-            ease: isSlowDevice ? "power1.out" : "back.out(1.7)",
-            scrollTrigger: {
-              trigger: timelineRef.current,
-              start: "top 80%",
-              toggleActions: "play none none none",
-              batch: true
-            }
+      // Enhanced year circles
+      gsap.fromTo(".year-circle",
+        { opacity: 0, scale: 0.6, rotationY: -90 },
+        {
+          opacity: 1,
+          scale: 1,
+          rotationY: 0,
+          duration: settings.duration,
+          stagger: settings.stagger,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: timelineRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none"
           }
-        );
-      } else {
-        // Static year circles for slow mobile devices
-        gsap.set(".year-circle", { opacity: 1, scale: 1 });
-      }
+        }
+      );
 
-      // Desktop-only hover effects
-      if (!isMobile && !isSlowDevice) {
-        gsap.utils.toArray(".timeline-card").forEach((card) => {
-          const cardEl = card as Element;
-          
-          let hoverTween: gsap.core.Tween;
-          
-          cardEl.addEventListener("mouseenter", () => {
-            hoverTween = gsap.to(cardEl, {
-              y: -3,
-              scale: 1.01,
-              duration: 0.3,
+      // MINIMAL HOVER/TOUCH EFFECTS
+      gsap.utils.toArray(".timeline-card").forEach((card, index) => {
+        const cardEl = card as Element;
+        
+        // Mobile scroll-triggered glow (keep this)
+        if (isMobile) {
+          gsap.fromTo(cardEl,
+            { 
+              boxShadow: "0 0 0px rgba(255,255,255,0)",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 50%, rgba(255,255,255,0.015) 100%)"
+            },
+            {
+              boxShadow: "0 0 20px rgba(255,255,255,0.08)",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.025) 50%, rgba(255,255,255,0.03) 100%)",
+              duration: 0.8,
               ease: "power2.out",
-              overwrite: "auto"
+              scrollTrigger: {
+                trigger: cardEl,
+                start: "top 85%",
+                end: "bottom 15%",
+                toggleActions: "play reverse play reverse",
+                scrub: false
+              }
+            }
+          );
+
+          // MINIMAL touch feedback for mobile
+          cardEl.addEventListener("touchstart", () => {
+            gsap.to(cardEl, {
+              scale: 0.99,
+              duration: 0.15,
+              ease: "power2.out"
+            });
+          });
+          
+          cardEl.addEventListener("touchend", () => {
+            gsap.to(cardEl, {
+              scale: 1,
+              duration: 0.2,
+              ease: "power2.out"
+            });
+          });
+        } else {
+          // MINIMAL desktop hover effects
+          cardEl.addEventListener("mouseenter", () => {
+            gsap.to(cardEl, {
+              y: -2, // Much smaller lift
+              scale: 1.005, // Barely noticeable scale
+              boxShadow: "0 8px 25px rgba(255,255,255,0.06)", // Subtle shadow
+              borderColor: "rgba(255,255,255,0.15)", // Slight border glow
+              duration: 0.3,
+              ease: "power2.out"
             });
           });
           
           cardEl.addEventListener("mouseleave", () => {
-            if (hoverTween) hoverTween.kill();
             gsap.to(cardEl, {
               y: 0,
               scale: 1,
+              boxShadow: "0 0 0px rgba(255,255,255,0)",
+              borderColor: "rgba(255,255,255,0.1)",
               duration: 0.3,
-              ease: "power2.out",
-              overwrite: "auto"
+              ease: "power2.out"
             });
           });
-        });
-      }
+        }
 
-      // Cleanup function
+        // MINIMAL year circle hover
+        const yearCircle = cardEl.closest('.timeline-item')?.querySelector('.year-circle');
+        if (yearCircle && !isMobile) {
+          cardEl.addEventListener("mouseenter", () => {
+            gsap.to(yearCircle, {
+              borderColor: "rgba(255,255,255,0.4)",
+              duration: 0.3,
+              ease: "power2.out"
+            });
+          });
+          
+          cardEl.addEventListener("mouseleave", () => {
+            gsap.to(yearCircle, {
+              borderColor: "rgba(255,255,255,0.2)",
+              duration: 0.3,
+              ease: "power2.out"
+            });
+          });
+        }
+      });
+
+      // Cleanup
       return () => {
         if (planeRef.current) {
           gsap.set(planeRef.current, { willChange: "auto" });
         }
-        gsap.killTweensOf(".timeline-card");
       };
 
     }, sectionRef);
 
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach(st => st.kill());
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -274,14 +357,21 @@ const Timeline = () => {
       }}
       id="Timeline"
     >
-      {/* Minimal responsive background */}
+      {/* Enhanced visual background */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-full h-16 sm:h-24 md:h-32 bg-gradient-to-b from-white/[0.015] sm:from-white/[0.02] to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full h-16 sm:h-24 md:h-32 bg-gradient-to-t from-white/[0.01] sm:from-white/[0.015] to-transparent"></div>
+        <div className="absolute top-0 left-0 w-full h-24 sm:h-32 md:h-40 bg-gradient-to-b from-white/[0.03] via-white/[0.015] to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-full h-24 sm:h-32 md:h-40 bg-gradient-to-t from-white/[0.025] via-white/[0.012] to-transparent"></div>
+        
+        <div className="absolute top-0 left-0 w-40 sm:w-56 md:w-72 h-40 sm:h-56 md:h-72 bg-gradient-to-br from-white/[0.04] to-transparent blur-2xl md:blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-40 sm:w-56 md:w-72 h-40 sm:h-56 md:h-72 bg-gradient-to-tl from-white/[0.035] to-transparent blur-2xl md:blur-3xl"></div>
+        
+        <div className="absolute w-1.5 h-1.5 bg-white/30 rounded-full top-[20%] left-[15%] animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
+        <div className="absolute w-1 h-1 bg-blue-200/25 rounded-full top-[60%] right-[20%] animate-pulse shadow-[0_0_8px_rgba(147,197,253,0.4)]" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute w-1.5 h-1.5 bg-white/20 rounded-full bottom-[30%] left-[80%] animate-pulse shadow-[0_0_12px_rgba(255,255,255,0.2)]" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="max-w-sm sm:max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto relative z-10">
-        {/* Fully responsive title */}
+        {/* Enhanced responsive title */}
         <div className="text-center mb-6 sm:mb-8 md:mb-12 lg:mb-20">
           <h2 
             ref={titleRef}
@@ -289,29 +379,35 @@ const Timeline = () => {
           >
             Our <span className="font-medium bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">Achievements</span>
           </h2>
-          <div className="w-12 sm:w-16 md:w-20 lg:w-24 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto"></div>
+          <div className="w-12 sm:w-16 md:w-20 lg:w-24 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
         </div>
 
         <div ref={timelineRef} className="relative">
-          {/* Responsive timeline line */}
-          <div className="timeline-line absolute left-4 sm:left-6 md:left-1/2 top-0 w-px h-full bg-gradient-to-b from-white/15 via-white/10 to-white/15 md:transform md:-translate-x-1/2"></div>
+          <div className="timeline-line absolute left-4 sm:left-6 md:left-1/2 top-0 w-px h-full bg-gradient-to-b from-white/40 via-white/25 to-white/40 md:transform md:-translate-x-1/2 shadow-[0_0_15px_rgba(255,255,255,0.3)]"></div>
 
-          {/* Responsive plane */}
+          {/* ✈️ BIGGER ENHANCED PLANE WITH GLOW */}
           <div 
             ref={planeRef}
             className="absolute left-4 sm:left-6 md:left-1/2 top-0 transform -translate-x-1/2 z-30 pointer-events-none"
           >
-            <svg 
-              className="text-white/80 transform rotate-180 w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-              viewBox="0 0 24 24" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" 
-                fill="currentColor"
-              />
-            </svg>
+            <div className="relative">
+              <svg 
+                className="text-white drop-shadow-2xl transform rotate-180 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10"
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.4))' }}
+              >
+                <path 
+                  d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" 
+                  fill="currentColor"
+                />
+              </svg>
+              
+              <div className="absolute -top-1 -left-1 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-white/25 rounded-full blur-sm opacity-70 shadow-[0_0_15px_rgba(255,255,255,0.4)]"></div>
+              <div className="absolute -top-1.5 -left-1.5 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 bg-white/15 rounded-full blur-md opacity-50 shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
+              <div className="absolute -top-2 -left-2 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-white/8 rounded-full blur-lg opacity-30 shadow-[0_0_25px_rgba(255,255,255,0.2)]"></div>
+            </div>
           </div>
 
           <div className="space-y-4 xs:space-y-6 sm:space-y-8 md:space-y-12 lg:space-y-16 xl:space-y-20">
@@ -324,25 +420,25 @@ const Timeline = () => {
                   index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                 }`}
               >
-                {/* Responsive year circle */}
+                {/* Year circle with minimal hover */}
                 <div className="absolute left-4 sm:left-6 md:left-1/2 top-2 xs:top-2.5 sm:top-3 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 z-20 transform -translate-x-1/2">
-                  <div className="year-circle w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-black border border-white/15 hover:border-white/30 rounded-full flex items-center justify-center transition-colors duration-300">
-                    <span className="text-white font-medium text-xs sm:text-xs md:text-sm">
+                  <div className="year-circle w-8 h-8 xs:w-9 xs:h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-13 lg:h-13 bg-gradient-to-br from-black/90 to-gray-900/90 border border-white/20 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg">
+                    <span className="text-white font-semibold text-xs sm:text-sm md:text-base">
                       {achievement.year}
                     </span>
                   </div>
                 </div>
 
-                {/* Responsive content card */}
+                {/* Content card with minimal effects */}
                 <div className={`
                   pl-8 xs:pl-9 sm:pl-10 md:pl-0 pr-2 sm:pr-4 md:pr-0 md:w-5/12 
                   ${index % 2 === 0 ? 'md:pr-6 lg:pr-12' : 'md:pl-6 lg:pl-12'}
                 `}>
-                  <div className="timeline-card bg-white/[0.015] sm:bg-white/[0.02] hover:bg-white/[0.03] border border-white/6 hover:border-white/12 rounded-lg sm:rounded-xl md:rounded-2xl p-2.5 xs:p-3 sm:p-4 md:p-5 lg:p-6 relative transition-all duration-300">
+                  <div className="timeline-card relative bg-gradient-to-br from-white/[0.03] via-white/[0.02] to-white/[0.015] border border-white/10 rounded-xl md:rounded-2xl lg:rounded-3xl p-3 xs:p-4 sm:p-5 md:p-6 lg:p-7 transition-all duration-300 overflow-hidden">
                     
-                    {/* Responsive logo */}
+                    {/* Logo */}
                     {achievement.logo && (
-                      <div className="absolute top-2 xs:top-2.5 sm:top-3 md:top-4 right-2 xs:right-2.5 sm:right-3 md:right-4 w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 bg-white/5 rounded flex items-center justify-center">
+                      <div className="absolute top-3 xs:top-3.5 sm:top-4 md:top-5 right-3 xs:right-3.5 sm:right-4 md:right-5 w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-white/10 rounded-lg flex items-center justify-center border border-white/15">
                         <img 
                           src={achievement.logo}
                           alt={`${achievement.title} logo`}
@@ -356,29 +452,28 @@ const Timeline = () => {
                       </div>
                     )}
                     
-                    <div className="pr-6 xs:pr-7 sm:pr-8 md:pr-10">
-                      {/* Responsive year badge */}
-                      <div className="inline-flex items-center px-1.5 xs:px-2 py-0.5 xs:py-1 mb-1.5 xs:mb-2 sm:mb-3 text-xs bg-white/8 text-white/70 rounded border border-white/10">
+                    <div className="relative pr-8 xs:pr-9 sm:pr-10 md:pr-12 lg:pr-14">
+                      <div className="inline-flex items-center px-2.5 xs:px-3 py-1.5 mb-2 sm:mb-3 text-xs bg-white/15 text-white/90 rounded-full border border-white/20 font-medium backdrop-blur-sm">
                         {achievement.year}
                       </div>
 
-                      {/* Responsive title */}
-                      <h3 className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-medium text-white mb-1.5 xs:mb-2 sm:mb-3 leading-tight">
+                      <h3 className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-white mb-2 xs:mb-2.5 sm:mb-3 md:mb-4 leading-tight">
                         {achievement.title}
                       </h3>
                       
-                      {/* Responsive description */}
-                      <p className="text-white/60 text-xs sm:text-sm md:text-base mb-2 xs:mb-2.5 sm:mb-3 md:mb-4 font-light leading-relaxed">
+                      <p className="text-white/70 text-xs sm:text-sm md:text-base lg:text-lg mb-2.5 xs:mb-3 sm:mb-4 md:mb-5 font-light leading-relaxed">
                         {achievement.description}
                       </p>
 
-                      {/* Responsive highlight */}
-                      <div className="border-l-2 border-white/20 pl-2 sm:pl-3">
-                        <p className="text-white/80 font-medium text-xs sm:text-sm md:text-base leading-relaxed">
+                      <div className="border-l-2 border-white/25 pl-3 sm:pl-4 bg-white/[0.02] rounded-r-lg py-2">
+                        <p className="text-white/90 font-semibold text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
                           {achievement.highlight}
                         </p>
                       </div>
                     </div>
+
+                    {/* Minimal bottom accent */}
+                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-white/30 to-white/20 hover:w-full transition-all duration-500 ease-out rounded-full"></div>
                   </div>
                 </div>
               </div>
@@ -386,7 +481,7 @@ const Timeline = () => {
           </div>
         </div>
 
-        <div className="h-3 xs:h-4 sm:h-6 md:h-8 lg:h-12 xl:h-16"></div>
+        <div className="h-4 xs:h-6 sm:h-8 md:h-12 lg:h-16 xl:h-20"></div>
       </div>
     </section>
   );
