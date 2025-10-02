@@ -125,12 +125,12 @@ const Footer = () => {
               <div className="group p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 hover:border-blue-400/30 transition-all duration-300">
                 <div className="flex items-start space-x-4">
                   <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-blue-400/20 transition-colors duration-300">
-                    <Phone size={20} className="text-white/80 group-hover:text-blue-400" />
+                    <Envelope size={20} className="text-white/80" />
                   </div>
                   <div>
-                    <p className="text-white font-medium">Vaibhav Tayal (Captain)</p>
-                    <a href="tel:+919252480742" className="text-white/70 hover:text-blue-400 transition-colors duration-300">
-                      +91 9252480742
+                    <p className="text-white font-medium">Atharva Sharma (Captain)</p>
+                    <a className="text-white/70 hover:text-blue-400 transition-colors duration-300">
+                      email
                     </a>
                   </div>
                 </div>
@@ -140,12 +140,12 @@ const Footer = () => {
               <div className="group p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/8 hover:border-purple-400/30 transition-all duration-300">
                 <div className="flex items-start space-x-4">
                   <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-purple-400/20 transition-colors duration-300">
-                    <Phone size={20} className="text-white/80 group-hover:text-purple-400" />
+                    <Envelope size={20} className="text-white/80" />
                   </div>
                   <div>
-                    <p className="text-white font-medium">Om Biscuitwala (Vice-Captain)</p>
-                    <a href="tel:+917447779897" className="text-white/70 hover:text-purple-400 transition-colors duration-300">
-                      +91 7447779897
+                    <p className="text-white font-medium">Mahak Sharma (Vice-Captain)</p>
+                    <a className="text-white/70 hover:text-purple-400 transition-colors duration-300">
+                      email
                     </a>
                   </div>
                 </div>
@@ -230,7 +230,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-white/60 text-sm">
-                © 2024 Team UAS NMIMS. All rights reserved.
+                © 2025 Team UAS NMIMS. All rights reserved.
               </p>
             </div>
             

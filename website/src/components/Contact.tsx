@@ -8,7 +8,8 @@ import {
   EnvelopeSimple,
   InstagramLogo,
   YoutubeLogo,
-  DiscordLogo
+  DiscordLogo,
+  FacebookLogo,
 } from 'phosphor-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -35,25 +36,25 @@ const Contact = () => {
   const socialLinks = [
     { 
       icon: LinkedinLogo, 
-      href: 'https://linkedin.com/company/teamuas-nmims', 
+      href: 'https://www.linkedin.com/company/uas-nmims/posts/?feedView=all', 
       label: 'LinkedIn',
       color: 'hover:text-white hover:bg-blue-600'
     },
     { 
-      icon: TwitterLogo, 
-      href: 'https://twitter.com/teamuas_nmims', 
-      label: 'Twitter',
+      icon: FacebookLogo, 
+      href: 'https://www.facebook.com/UASNMIMS/', 
+      label: 'Facebook',
       color: 'hover:text-white hover:bg-blue-400'
     },
     { 
       icon: InstagramLogo, 
-      href: 'https://instagram.com/teamuas_nmims', 
+      href: 'https://www.instagram.com/uasnmims/#', 
       label: 'Instagram',
       color: 'hover:text-white hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500'
     },
     { 
       icon: YoutubeLogo, 
-      href: 'https://youtube.com/@teamuas-nmims', 
+      href: 'https://www.youtube.com/channel/UCto9FMLqgt1F0MLdSEjdzgg', 
       label: 'YouTube',
       color: 'hover:text-white hover:bg-red-600'
     },
@@ -287,12 +288,12 @@ const Contact = () => {
               <img 
                 src="/img/NMIMS_LOGO1.png" // Replace with actual NMIMS logo path
                 alt="NMIMS University Logo"
-                className="h-20 md:h-24 mx-auto mb-6 transition-transform duration-300 hover:scale-105"
+                className="h-24 md:h-32 mx-auto mb-6 transition-transform duration-300 hover:scale-105 rounded-2xl"
               />
               <h3 className="text-2xl font-semibold mb-4">NMIMS University</h3>
               <p className="text-white/70 max-w-2xl mx-auto">
                 Narsee Monjee Institute of Management Studies continues to support cutting-edge research 
-                and innovation in technology, healthcare, and engineering solutions.
+                and innovation in technology and engineering solutions.
               </p>
             </div>
           </div>
@@ -311,7 +312,8 @@ const Contact = () => {
         </div>
 
         {/* Social Icons Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="flex flex-wrap justify-center gap-6">
+
           {socialLinks.map((social, index) => {
             const IconComponent = social.icon;
             return (

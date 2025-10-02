@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 interface PreloaderProps {
@@ -6,127 +6,107 @@ interface PreloaderProps {
 }
 
 const CleanPreloader = ({ onComplete }: PreloaderProps) => {
-  const [progress, setProgress] = useState(0);
   const preloaderRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
-  const loaderRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Optimize for slower PCs
+    gsap.set(gsap.config(), { 
+      force3D: true,  // Hardware acceleration
+      nullTargetWarn: false
+    });
+
+    // Check device performance
+    const isSlowDevice = () => {
+      return navigator.hardwareConcurrency <= 4 || 
+             /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
+    const performanceMultiplier = isSlowDevice() ? 0.7 : 1; // Slower animations for weak devices
     const tl = gsap.timeline();
 
-    // Fast logo entrance
-    tl.fromTo(logoRef.current,
-      { 
-        opacity: 0,
-        y: 20,
-        scale: 0.9
-      },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.4,
-        ease: "power2.out"
-      }
-    )
+    // Initial optimized setup
+    gsap.set(logoRef.current, {
+      y: 200, // Reduced travel distance
+      scale: 0.4,
+      opacity: 1,
+      willChange: "transform, opacity", // Optimize for animations
+      backfaceVisibility: "hidden" // Prevent flickering
+    });
 
-    // Quick loader and text appear
-    .fromTo([loaderRef.current, textRef.current],
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" },
-      0.2
-    )
-
-    // Fast progress animation
-    .to({}, {
-      duration: 1,
-      ease: "power2.out",
-      onUpdate: function() {
-        const prog = Math.round(this.progress() * 100);
-        setProgress(prog);
-      }
-    }, 0.3)
-
-    // Quick exit - logo moves up
+    tl
+    // Smoother logo slide up
     .to(logoRef.current, {
-      y: -80,
-      scale: 0.7,
-      duration: 0.4,
-      ease: "power2.in"
-    }, "+=0.1")
+      y: 0,
+      scale: 1,
+      duration: 0.8 * performanceMultiplier,
+      ease: "power1.out", // Gentler easing for smoother performance
+      force3D: true
+    })
 
-    .to([loaderRef.current, textRef.current], {
+    // Shorter pause
+    .to({}, { duration: 0.2 * performanceMultiplier })
+
+    // Optimized scale and fade
+    .to(logoRef.current, {
+      scale: isSlowDevice() ? 8 : 12, // Less scaling for slower devices
       opacity: 0,
-      y: -20,
-      duration: 0.3,
-      ease: "power2.in"
-    }, "-=0.3")
+      duration: 1 * performanceMultiplier,
+      ease: "power1.in", // Smoother easing
+      force3D: true,
+      onUpdate: function() {
+        // Smooth opacity transition
+        const progress = this.progress();
+        if (progress > 0.6) {
+          gsap.set(logoRef.current, {
+            filter: `blur(${(progress - 0.6) * 5}px)`
+          });
+        }
+      }
+    })
 
-    // Fast background fade
+    // Quick background fade
     .to(preloaderRef.current, {
       opacity: 0,
-      duration: 0.3,
-      ease: "power2.inOut",
-      onComplete: () => onComplete()
-    }, "-=0.1");
+      duration: 0.25,
+      ease: "none",
+      force3D: true,
+      onComplete: () => {
+        // Clean up
+        gsap.set(logoRef.current, { willChange: "auto" });
+        onComplete();
+      }
+    }, "-=0.3");
 
-    return () => tl.kill();
+    return () => {
+      tl.kill();
+      gsap.set(logoRef.current, { willChange: "auto" });
+    };
   }, [onComplete]);
 
   return (
     <div 
       ref={preloaderRef}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #000000 0%, #0a0a0a 35%, #030712 70%, #000000 100%)',
+        backfaceVisibility: 'hidden', // Prevent flickering
+        perspective: '1000px' // Better 3D rendering
+      }}
     >
-      {/* Logo */}
-      <div className="mb-12">
-        <img 
-          ref={logoRef}
-          src="/logo-Photoroom.png" 
-          alt="Team UAS Logo" 
-          className="h-28 md:h-32 filter drop-shadow-xl"
-        />
-      </div>
-
-      {/* Clean Circular Loader */}
-      <div ref={loaderRef} className="relative mb-6">
-        <svg 
-          className="w-16 h-16 transform -rotate-90" 
-          viewBox="0 0 64 64"
-        >
-          {/* Background circle */}
-          <circle
-            cx="32"
-            cy="32"
-            r="28"
-            stroke="white"
-            strokeOpacity="0.2"
-            strokeWidth="2"
-            fill="none"
-          />
-          {/* Progress circle */}
-          <circle
-            cx="32"
-            cy="32"
-            r="28"
-            stroke="white"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="round"
-            strokeDasharray={2 * Math.PI * 28}
-            strokeDashoffset={2 * Math.PI * 28 * (1 - progress / 100)}
-            className="transition-all duration-100 ease-out"
-          />
-        </svg>
-      </div>
-
-      {/* Simple Loading Text */}
-      <div ref={textRef} className="text-center">
-        <div className="text-white/70 text-sm font-light tracking-widest">
-          LOADING
-        </div>
-      </div>
+      <img 
+        ref={logoRef}
+        src="/logo-Photoroom.png" 
+        alt="Team UAS Logo" 
+        className="h-32 filter drop-shadow-2xl"
+        style={{
+          backfaceVisibility: 'hidden', // Prevent flickering
+          WebkitFontSmoothing: 'antialiased',
+          imageRendering: 'crisp-edges'
+        }}
+        loading="eager" // Priority loading
+        decoding="sync"
+      />
     </div>
   );
 };

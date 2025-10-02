@@ -2,8 +2,8 @@
   position: relative;
   overflow-x: hidden;
 
-  --logoloop-gap: 32px;
-  --logoloop-logoHeight: 28px;
+  --logoloop-gap: 40px;
+  --logoloop-logoHeight: 64px;
   --logoloop-fadeColorAuto: #ffffff;
 }
 
@@ -28,6 +28,7 @@
 .logoloop__list {
   display: flex;
   align-items: center;
+
 }
 
 .logoloop__item {
@@ -47,13 +48,14 @@
 }
 
 .logoloop__item img {
-  height: var(--logoloop-logoHeight);
+  height: 120px;
   width: auto;
   display: block;
   object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
   -webkit-user-drag: none;
   pointer-events: none;
+  border-radius: 10px;
   /* Links handle interaction */
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

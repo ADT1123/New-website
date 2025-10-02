@@ -94,9 +94,6 @@ const Hero = () => {
       <div className="absolute inset-0 w-full h-full min-w-full min-h-full">
         <Orb 
           hueShift={240} // Blue-purple hue for tech feel
-          hoverIntensity={0.3}
-          rotateOnHover={true}
-          forceHoverState={false}
         />
       </div>
 
@@ -104,14 +101,9 @@ const Hero = () => {
       <div className="absolute inset-0 w-full h-full min-w-full min-h-full opacity-30">
         <Orb 
           hueShift={180} // Cyan hue
-          hoverIntensity={0.15}
-          rotateOnHover={false}
-          forceHoverState={true}
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none" />
       </div>
-
-      {/* Gradient overlay for better text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none" />
 
       {/* Content - Responsive */}
       <div className="relative z-10 text-center px-4 w-full max-w-7xl mx-auto">

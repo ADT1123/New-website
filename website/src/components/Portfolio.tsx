@@ -22,15 +22,15 @@ const Portfolio = () => {
       href: '#'
     },
     {
-            src: '/logo-Photoroom.png',
+      src: '/img/NMIMS_LOGO4.png',
       title: 'NMIMS University'
     },
     {
-      src: '/logo-Photoroom.png',
+      src: '/img/Solidworks2.png',
       title: 'AUVSI Competition'
     },
     {
-      src: '/logo-Photoroom.png',
+      src: '/img/Ansys1.png',
       title: 'DRDO Partner'
     },
     {

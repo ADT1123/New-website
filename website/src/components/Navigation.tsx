@@ -65,11 +65,13 @@ const Navigation = () => {
   return (
     <>
       {/* Clean Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 ${
-        scrolled 
-          ? 'bg-black/90 backdrop-blur-xl border-b border-white/10' 
-          : 'bg-black/50 backdrop-blur-md'
-      }`}>
+        <nav className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 rounded-b-2xl shadow-lg ${
+          scrolled 
+            ? 'bg-black/95 backdrop-blur-xl border-b border-white/20 shadow-black/30' 
+            : 'bg-black/75 backdrop-blur-md shadow-black/20'
+        }`}>
+
+
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             

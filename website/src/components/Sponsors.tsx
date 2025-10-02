@@ -44,63 +44,30 @@ const Sponsors = () => {
   // Main Supporter - NMIMS
   const mainSupporter = {
     name: "NMIMS University",
-    logo: "/img/nmims-logo.png",
+    logo: "/img/NMIMS_LOGO4.png",
+    logoClass: "nmims-logo rounded-border",
     description: "Narsee Monjee Institute of Management Studies - Our Primary Academic Partner",
     website: "https://nmims.edu"
   };
 
-  // Key Sponsors Data (for carousel)
+  // Key Sponsors Data with real logos and websites
   const keySponsors = [
     {
-      name: "TechCorp Solutions",
-      logo: "/img/sponsors/techcorp.png",
-      description: "Leading technology solutions provider"
+      name: "NMIMS",
+      logo: "/img/NMIMS_LOGO4.png",
+      website: "https://nmims.edu"
     },
     {
-      name: "InnovateX Labs",
-      logo: "/img/sponsors/innovatex.png", 
-      description: "Research and development partner"
+      name: "SolidWorks",
+      logo: "/img/Solidworks2.png", 
+      website: "https://www.solidworks.com/"
     },
     {
-      name: "DroneWorks Inc",
-      logo: "/img/sponsors/droneworks.png",
-      description: "Drone technology and manufacturing"
+      name: "Ansys",
+      logo: "/img/Ansys1.png",
+      website: "https://www.ansys.com/"
     },
-    {
-      name: "AI Dynamics",
-      logo: "/img/sponsors/aidynamics.png",
-      description: "Artificial intelligence solutions"
-    },
-    {
-      name: "Healthcare Plus",
-      logo: "/img/sponsors/healthcareplus.png",
-      description: "Healthcare technology innovations"
-    },
-    {
-      name: "Future Systems",
-      logo: "/img/sponsors/futuresystems.png",
-      description: "Next-generation system integration"
-    },
-    {
-      name: "Robotics Hub",
-      logo: "/img/sponsors/roboticshub.png",
-      description: "Advanced robotics and automation"
-    },
-    {
-      name: "CloudTech Pro",
-      logo: "/img/sponsors/cloudtech.png",
-      description: "Cloud computing and infrastructure"
-    },
-    {
-      name: "Innovation Studio",
-      logo: "/img/sponsors/innovationstudio.png",
-      description: "Creative technology solutions"
-    },
-    {
-      name: "NextGen Ventures",
-      logo: "/img/sponsors/nextgen.png",
-      description: "Investment and business development"
-    }
+
   ];
 
   useEffect(() => {
@@ -168,15 +135,15 @@ const Sponsors = () => {
     gsap.to(slides, {
       x: (index) => {
         const position = index - currentIndex;
-        return `${position * 350}px`; // 350px spacing between slides
+        return `${position * 400}px`; // Increased spacing for bigger logos
       },
       scale: (index) => {
         const position = Math.abs(index - currentIndex);
-        return position === 0 ? 1.1 : 0.9; // Center slide larger, others smaller
+        return position === 0 ? 1.3 : 1.0; // Bigger scaling for center logo
       },
       opacity: (index) => {
         const position = Math.abs(index - currentIndex);
-        return position === 0 ? 1 : 0.6; // Center slide fully visible, others semi-transparent
+        return position === 0 ? 1 : 0.5; // Center logo fully visible, others semi-transparent
       },
       duration: 0.8,
       ease: "power2.out",
@@ -197,7 +164,7 @@ const Sponsors = () => {
     <section 
       ref={sectionRef}
       className="min-h-screen py-16 md:py-20 px-4"
-      style={{ backgroundColor: '#0f0f0f' }}
+      style={{ backgroundColor: '#000000ff' }}
       id="sponsors"
     >
       <div className="max-w-7xl mx-auto">
@@ -229,11 +196,12 @@ const Sponsors = () => {
                      backgroundColor: 'rgba(255, 255, 255, 0.03)'
                    }}>
                 <div className="mb-8">
-                  <img 
-                    src={mainSupporter.logo}
-                    alt={mainSupporter.name}
-                    className="h-24 md:h-32 mx-auto mb-6 transition-transform duration-300 hover:scale-105"
-                  />
+                <img 
+                  src={mainSupporter.logo}
+                  alt={mainSupporter.name}
+                  className="h-24 md:h-32 mx-auto mb-6 transition-transform duration-300 hover:scale-105 rounded-2xl"
+                />
+
                 </div>
                 <h3 className="text-3xl md:text-4xl font-bold text-gray-100 mb-4">
                   {mainSupporter.name}
@@ -258,63 +226,49 @@ const Sponsors = () => {
           </div>
         </div>
 
-        {/* Key Sponsors Carousel Section */}
+        {/* Key Sponsors Carousel Section - LOGO ONLY */}
         <div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-100 text-center mb-16">
             Key Sponsors
           </h2>
           
-          {/* Smooth GSAP Carousel */}
+          {/* Logo-Only Carousel - No Text */}
           <div className="relative overflow-hidden py-16">
-            <div ref={carouselRef} className="flex justify-center items-center" style={{ height: '300px' }}>
+            <div ref={carouselRef} className="flex justify-center items-center" style={{ height: '200px' }}>
               {keySponsors.map((sponsor, index) => (
                 <div 
                   key={index}
                   className="sponsor-slide absolute"
                   style={{ 
-                    transform: `translateX(${(index - currentIndex) * 350}px) scale(${Math.abs(index - currentIndex) === 0 ? 1.1 : 0.9})`,
-                    opacity: Math.abs(index - currentIndex) === 0 ? 1 : 0.6,
+                    transform: `translateX(${(index - currentIndex) * 400}px) scale(${Math.abs(index - currentIndex) === 0 ? 1.3 : 1.0})`,
+                    opacity: Math.abs(index - currentIndex) === 0 ? 1 : 0.5,
                     transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
                 >
-                  <div className="relative rounded-2xl p-8 text-center w-80"
-                       style={{ 
-                         backgroundColor: 'rgba(255, 255, 255, 0.04)'
-                       }}>
-                    
-                    {/* Logo Section */}
-                    <div className="mb-6">
-                      <div className="w-24 h-24 mx-auto mb-6 rounded-xl flex items-center justify-center"
-                           style={{ backgroundColor: 'rgba(255, 255, 255, 0.08)' }}>
-                        <div className="w-20 h-20 rounded-lg flex items-center justify-center"
-                             style={{ backgroundColor: `hsl(${index * 36}, 70%, 60%)` }}>
-                          <span className="text-white font-bold text-xl">
-                            {sponsor.name.charAt(0)}
-                          </span>
-                        </div>
-                      </div>
+                  {/* Clickable Logo - NO TEXT */}
+                  <a
+                    href={sponsor.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block transition-all duration-300 hover:scale-110 cursor-pointer"
+                  >
+                    <div className="flex items-center justify-center w-48 h-32">
+                      <img 
+                        src={sponsor.logo}
+                        alt={sponsor.name}
+                        className="max-w-full max-h-full rounded-xl object-contain transition-all duration-300 hover:brightness-110"
+                        style={{
+                          filter: Math.abs(index - currentIndex) === 0 ? 'brightness(1) saturate(1.1)' : 'brightness(0.8) saturate(0.8)'
+                        }}
+                      />
                     </div>
-                    
-                    {/* Content */}
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-100 mb-3">
-                        {sponsor.name}
-                      </h3>
-                      <p className="text-gray-400 leading-relaxed mb-6 text-sm">
-                        {sponsor.description}
-                      </p>
-                      
-                      <button className="text-sm text-gray-300 hover:text-white transition-colors duration-300 font-medium">
-                        Learn More →
-                      </button>
-                    </div>
-                  </div>
+                  </a>
                 </div>
               ))}
             </div>
 
             {/* Carousel Indicators */}
-            <div className="flex justify-center mt-8 gap-2">
+            <div className="flex justify-center mt-12 gap-2">
               {keySponsors.map((_, index) => (
                 <button
                   key={index}
@@ -330,13 +284,83 @@ const Sponsors = () => {
           </div>
         </div>
 
+{/* Sponsor Us Section */}
+        <div className="text-center mt-32 pt-16 border-t border-gray-800">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-8">
+            <span className="text-transparent bg-clip-text text-white">Sponsor Us</span>
+          </h2>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-12">
+            Join our community of supporters and help us drive innovation forward. Download our sponsorship brochure to learn more about partnership opportunities.
+          </p>
+          
+          {/* Brochure Download Section */}
+          <div className="mb-12">
+            <button
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/documents/sponsorship-brochure.pdf'; // Replace with your actual brochure path
+                link.download = '';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="inline-flex items-center gap-4 px-12 py-6 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#ffffff'
+              }}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download Sponsorship Brochure
+            </button>
+          </div>
+
+          {/* Contact Mail Section */}
+          <div className="max-w-2xl mx-auto">
+            <h3 className="text-2xl font-semibold text-gray-200 mb-6">
+              Ready to Partner With Us?
+            </h3>
+            <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+              <a
+                href="mailto:uasnmims@gmail.com"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  color: '#ffffff',
+                  border: '1px solid rgba(255, 255, 255, 0.08)'
+                }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Send us an Email
+              </a>
+              
+              <div className="text-gray-400">
+                <p className="text-sm">or reach us directly at</p>
+                <a 
+                  href="mailto:uasnmims@gmail.com" 
+                  className="text-yellow-400 hover:text-yellow-300 font-semibold transition-colors duration-300"
+                >
+                  uasnmims@gmail.com
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
         {/* Thank You Section */}
-        <div className="text-center mt-20 pt-16" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+        <div className="text-center mt-20 pt-16">
           <h3 className="text-2xl font-semibold text-gray-200 mb-4">
             Thank You to All Our Partners
           </h3>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Your support makes our innovative projects possible and helps us continue pushing the boundaries of technology and healthcare solutions.
+            Your support makes our innovative projects possible and helps us continue pushing the boundaries of technology.
           </p>
         </div>
       </div>

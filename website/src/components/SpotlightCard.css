@@ -60,3 +60,27 @@
 .card-spotlight * {
   transition: all 0.3s ease;
 }
+
+/* Add this to your existing SpotlightCard.css */
+
+/* Fade in animation for content */
+.animate-fade-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth logo hover effects */
+.sponsor-item:hover .w-28 {
+  transform: scale(1.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
