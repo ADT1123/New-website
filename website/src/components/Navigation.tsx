@@ -184,7 +184,7 @@ const Navigation = () => {
             <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
               <div className="text-center">
                 <p className="text-sm text-white/60">
-                  Made with ❤️ by Team UAS
+                  Team UAS
                 </p>
               </div>
             </div>
