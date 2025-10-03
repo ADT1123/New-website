@@ -62,9 +62,9 @@ const Portfolio = () => {
       {loading && <Preloader onComplete={handlePreloaderComplete} />}
       
       <div className="main-content">
-        <Navigation />
         
         <main>
+          <Navigation />
           <section id="home">
             <Hero />
           </section>

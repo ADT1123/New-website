@@ -89,6 +89,7 @@ const Hero = () => {
   }, [currentText, isDeleting, currentWordIndex, words]);
 
   return (
+
     <div ref={heroRef} className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
       {/* WebGL Orb Background - Full coverage */}
       <div className="absolute inset-0 w-full h-full min-w-full min-h-full">
