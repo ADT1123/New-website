@@ -128,7 +128,7 @@ const Navigation = () => {
 
   return (
     <>
-      {/* Navigation */}
+      {/* Navigation - FIXED FOR MOBILE */}
       <nav 
         className={`fixed top-0 left-0 right-0 w-full z-[9999] transition-all duration-300 ${
           scrolled 
@@ -139,7 +139,11 @@ const Navigation = () => {
           WebkitBackfaceVisibility: 'hidden',
           backfaceVisibility: 'hidden',
           WebkitTransform: 'translate3d(0,0,0)',
-          transform: 'translate3d(0,0,0)'
+          transform: 'translate3d(0,0,0)',
+          // Mobile fixes for navbar disappearing
+          position: 'fixed',
+          top: 0,
+          willChange: 'transform'
         }}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">

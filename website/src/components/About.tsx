@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
   const sections = [
     {
@@ -22,6 +23,25 @@ const About = () => {
       id: "impact",
       title: "Our Impact",
       description: "Through national competitions, research publications, and industry collaborations, we're building the next generation of aerospace engineers while contributing to cutting-edge drone technology."
+    }
+  ];
+
+  // Stats data with animated counters
+  const stats = [
+    {
+      number: 6,
+      label: "Competitions Won",
+      suffix: "+"
+    },
+    {
+      number: 10,
+      label: "Vehicles Made",
+      suffix: "+"
+    },
+    {
+      number: 200,
+      label: "Flight Hours",
+      suffix: "+"
     }
   ];
 
@@ -84,6 +104,65 @@ const About = () => {
         }
       );
 
+      // ✨ ANIMATED COUNTER STATS ✨
+      // Stats container animation
+      gsap.fromTo(".stats-container",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1 * animationMultiplier,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: statsRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none"
+          }
+        }
+      );
+
+      // Individual stat cards animation
+      gsap.fromTo(".stat-card",
+        { opacity: 0, scale: 0.8, y: 20 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.8 * animationMultiplier,
+          stagger: 0.1,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: statsRef.current,
+            start: "top 75%",
+            toggleActions: "play none none none"
+          }
+        }
+      );
+
+      // Animated counting effect
+      stats.forEach((stat, index) => {
+        const counter = { value: 0 };
+        const element = document.querySelector(`#counter-${index}`);
+        
+        if (element) {
+          gsap.to(counter, {
+            value: stat.number,
+            duration: 2.5 * animationMultiplier,
+            ease: "power2.out", // Slow at end
+            delay: 0.5 + (index * 0.2),
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 70%",
+              toggleActions: "play none none none"
+            },
+            onUpdate: function() {
+              // Smooth counting animation
+              element.textContent = Math.round(counter.value).toString();
+            }
+          });
+        }
+      });
+
       // Gentle floating background elements
       gsap.to(".bg-float", {
         y: "random(-15, 15)",
@@ -96,7 +175,7 @@ const About = () => {
       });
 
       // Subtle mouse movement for particles
-      const handleMouseMove = (e) => {
+      const handleMouseMove = (e: MouseEvent) => {
         if (!prefersReducedMotion) {
           gsap.to(".bg-particle", {
             x: (index) => (e.clientX - window.innerWidth / 2) * (index + 1) * 0.005,
@@ -166,7 +245,7 @@ const About = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="sections-grid grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="sections-grid grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-20">
           {sections.map((section, index) => (
             <div 
               key={section.id}
@@ -196,6 +275,43 @@ const About = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* ✨ ANIMATED STATS SECTION ✨ */}
+        <div 
+          ref={statsRef}
+          className="stats-container relative py-16"
+        >
+          {/* Stats Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] via-white/[0.04] to-white/[0.02] rounded-3xl border border-white/10"></div>
+          
+          {/* Stats Grid */}
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 px-8">
+            {stats.map((stat, index) => (
+              <div 
+                key={index}
+                className="stat-card text-center"
+              >
+                {/* Number */}
+                <div className="mb-3">
+                  <span 
+                    id={`counter-${index}`}
+                    className="text-4xl md:text-5xl font-bold text-white"
+                  >
+                    0
+                  </span>
+                  <span className="text-4xl md:text-5xl font-bold text-white/80">
+                    {stat.suffix}
+                  </span>
+                </div>
+                
+                {/* Label */}
+                <div className="text-white/70 text-base md:text-lg font-medium tracking-wide">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
