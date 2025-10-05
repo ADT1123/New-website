@@ -61,6 +61,38 @@ const Contact = () => {
   ];
 
   useEffect(() => {
+    // Inject minimal navy styles and interactive background
+    const style = document.createElement("style");
+    style.textContent = `
+      .card-minimal {
+        background: rgba(12,17,24,0.6);
+        border: 1px solid rgba(80,140,210,0.20);
+        border-radius: 18px;
+        transition: transform .25s cubic-bezier(.2,.7,.1,1), border-color .25s, box-shadow .25s;
+        backdrop-filter: blur(6px) saturate(120%);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        box-shadow: 0 10px 30px rgba(32,93,170,0.08);
+      }
+      .card-minimal:hover {
+        transform: translateY(-3px);
+        border-color: rgba(120,170,235,0.35);
+        box-shadow: 0 16px 40px rgba(80,140,210,0.18);
+      }
+      .link-chip {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      }
+      .link-chip:hover {
+        transform: translateY(-2px) scale(1.03);
+        background: rgba(120,170,235,0.14);
+        box-shadow: 0 8px 26px rgba(80,140,210,0.25);
+        border-color: rgba(120,170,235,0.35);
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Page animations
     const ctx = gsap.context(() => {
       // Hero section animation
       gsap.fromTo(heroRef.current,
@@ -162,41 +194,113 @@ const Contact = () => {
           }
         }
       );
-
     }, sectionRef);
 
-    return () => ctx.revert();
+    // Interactive navy orbs
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReduced) {
+      const bg = document.getElementById("contact-orbs");
+      if (bg) {
+        const orbs: HTMLDivElement[] = [];
+        const count = 5;
+        for (let i = 0; i < count; i++) {
+          const orb = document.createElement("div");
+          orb.style.position = "absolute";
+          orb.style.width = `${260 + Math.random()*140}px`;
+          orb.style.height = orb.style.width;
+          orb.style.borderRadius = "50%";
+          orb.style.left = `${Math.random()*90}%`;
+          orb.style.top = `${Math.random()*85}%`;
+          orb.style.pointerEvents = "none";
+          orb.style.opacity = "0.55";
+          orb.style.mixBlendMode = "screen";
+          orb.style.filter = "blur(12px)";
+          orb.style.background = [
+            "radial-gradient(circle, rgba(80,140,210,0.26) 0%, transparent 80%)",
+            "radial-gradient(circle, rgba(120,170,235,0.18) 0%, transparent 75%)",
+            "radial-gradient(circle, rgba(50,100,185,0.22) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(32,93,170,0.16) 0%, transparent 85%)",
+            "radial-gradient(circle, rgba(90,150,220,0.22) 0%, transparent 78%)",
+          ][i % 5];
+
+          bg.appendChild(orb);
+          orbs.push(orb);
+
+          gsap.to(orb, {
+            x: () => Math.random()*120 - 60,
+            y: () => Math.random()*100 - 50,
+            duration: 22 + Math.random()*10,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            delay: Math.random()*6
+          });
+        }
+
+        // Mouse-follow glow
+        const glow = document.createElement("div");
+        glow.style.position = "absolute";
+        glow.style.width = "220px";
+        glow.style.height = "220px";
+        glow.style.borderRadius = "50%";
+        glow.style.pointerEvents = "none";
+        glow.style.opacity = "0.6";
+        glow.style.mixBlendMode = "screen";
+        glow.style.filter = "blur(12px)";
+        glow.style.background = "radial-gradient(circle,rgba(120,170,235,0.28) 8%,rgba(80,140,210,0.20) 46%,transparent 90%)";
+        bg.appendChild(glow);
+
+        let last = 0;
+        function move(e: MouseEvent | {clientX:number; clientY:number}) {
+          const now = performance.now();
+          if (now - last < 16) return; last = now;
+          const r = bg.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / r.width) * 100;
+          const y = ((e.clientY - r.top) / r.height) * 100;
+          glow.style.left = `calc(${x}% - 110px)`;
+          glow.style.top = `calc(${y}% - 110px)`;
+        }
+        bg.addEventListener("mousemove", move);
+        bg.addEventListener("touchmove", (evt) => {
+          if (evt.touches?.length) {
+            move({ clientX: evt.touches[0].clientX, clientY: evt.touches[0].clientY } as MouseEvent);
+          }
+        });
+      }
+    }
+
+    return () => {
+      ctx.revert();
+      if (document.head.contains(style)) document.head.removeChild(style);
+    };
   }, []);
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Create mailto link with pre-filled content
     const subject = encodeURIComponent("Inquiry from Team UAS NMIMS Website");
     const body = encodeURIComponent(`Hello Team UAS NMIMS,\n\n${message}\n\nBest regards,\n${email}`);
     window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
-    
-    // Reset form
     setEmail('');
     setMessage('');
   };
 
   return (
-    <section 
+    <section
       ref={sectionRef}
-       style={{ backgroundColor: '#0f0f0f' }}
       id="contact"
+      className="relative overflow-hidden"
+      style={{
+        background: "radial-gradient(ellipse at top, #0c1118 0%, #05070b 100%)"
+      }}
     >
+      {/* Navy orbs background */}
+      <div id="contact-orbs" className="pointer-events-none absolute inset-0 -z-10"></div>
+
       {/* Hero Section with Team Photo */}
       <div ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20">
-        {/* Background Elements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute w-96 h-96 bg-white/[0.02] rounded-full blur-3xl top-[10%] left-[5%]"></div>
-          <div className="absolute w-64 h-64 bg-white/[0.015] rounded-full blur-2xl bottom-[20%] right-[10%]"></div>
-        </div>
-
         {/* Title Section */}
         <div className="text-center mb-12 z-10">
-          <h1 className="title-text text-5xl md:text-7xl font-bold mb-4">
+          <h1 className="title-text text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-white">
             {teamInfo.title}
           </h1>
           <p className="title-text text-xl md:text-2xl text-white/80 max-w-4xl mx-auto mb-2">
@@ -243,8 +347,8 @@ const Contact = () => {
           </p>
         </div>
 
-        {/* Simple Email Contact */}
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-sm hover:bg-white/8 transition-all duration-500">
+        {/* Email Card */}
+        <div className="card-minimal p-8 md:p-12">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-full mb-6">
               <EnvelopeSimple size={28} className="text-white" />
@@ -262,7 +366,11 @@ const Contact = () => {
             <br />
             <a 
               href={`mailto:${contactEmail}?subject=Inquiry from Team UAS NMIMS Website`}
-              className="inline-block px-8 py-4 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 border border-white/30 rounded-xl text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/20"
+              className="inline-block px-8 py-4 border rounded-xl text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[rgba(80,140,210,0.25)]"
+              style={{
+                background: "linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0.10))",
+                borderColor: "rgba(120,170,235,0.35)"
+              }}
             >
               Send Email
             </a>
@@ -282,11 +390,11 @@ const Contact = () => {
         </div>
 
         {/* NMIMS Logo Section */}
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-sm hover:bg-white/8 transition-all duration-500">
+        <div className="card-minimal p-8 md:p-12">
           <div className="text-center">
             <div className="mb-8">
               <img 
-                src="/img/NMIMS_LOGO1.png" // Replace with actual NMIMS logo path
+                src="/img/NMIMS_LOGO1.png"
                 alt="NMIMS University Logo"
                 className="h-24 md:h-32 mx-auto mb-6 transition-transform duration-300 hover:scale-105 rounded-2xl"
               />
@@ -313,7 +421,6 @@ const Contact = () => {
 
         {/* Social Icons Grid */}
         <div className="flex flex-wrap justify-center gap-6">
-
           {socialLinks.map((social, index) => {
             const IconComponent = social.icon;
             return (
@@ -322,7 +429,7 @@ const Contact = () => {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`social-icon group relative bg-white/5 border border-white/10 rounded-2xl p-6 hover:scale-110 transition-all duration-300 ${social.color}`}
+                className={`social-icon link-chip group relative rounded-2xl p-6 hover:scale-110 transition-all duration-300 ${social.color}`}
                 aria-label={social.label}
               >
                 {/* Glow effect */}

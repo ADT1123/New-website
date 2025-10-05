@@ -16,7 +16,7 @@ const Hero = () => {
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   
-  const words = ['Develop.', 'Create.', 'Design.', 'Innovate.', 'Build.'];
+  const words = ['Research.', 'Develop.', 'Fly.'];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -143,12 +143,6 @@ const Hero = () => {
         
         {/* Buttons - Mobile Responsive */}
         <div ref={ctaRef} className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center px-4">
-          <Button 
-            size="lg" 
-            className="w-full sm:w-auto bg-black border-2 border-white/20 text-white hover:backdrop-blur-lg hover:bg-black/70 hover:shadow-lg px-6 md:px-8 py-4 md:py-6 text-base md:text-lg transition-all duration-300 hover:border-white/50"
-          >
-            LEARN MORE
-          </Button>
           <Link to="/projects" className="w-full sm:w-auto">
             <Button 
               size="lg"

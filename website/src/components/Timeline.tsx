@@ -13,11 +13,17 @@ const Timeline = () => {
 
   const achievements = [
     {
-      year: "2019",
-      title: "AUVSI SUAS 2019",
-      description: "We Participated for the fourth time in the 17th AUVSI SUAS 2019 with our Hexa-Copter.",
-      highlight: "4th rank Worldwide in Flight Readiness Review and 3rd among all Indian teams.",
+      year: "2025",
+      title: "Boeing National Aeromodelling Competition, IIT Bombay (2024–25)",
+      description: "Achieved 2nd place in the Zonal Round, showcasing technica innovation, teamwork, and precision in aeromodelling. Advanced to the National Finale, where the team was among the Top 12 in India to represent at IIT Bombay.",
+      highlight: "2nd Place in Zonal Round, Top 12 National Finalists",
       logo: "/img/NMIMS_LOGO1.png" 
+    },
+    {
+      year: "2023",
+      title: "Drone Log Competition, IIT Bombay Techfest", 
+      description: "Secured 2nd position in this national-level event focused on warehouse management using drones. The challenge tested our ability to design and operate drones for tasks such as payload handling, precision navigation, and efficient logistics execution",
+      highlight: "2nd Place Nationally among 30+ Teams",
     },
     {
       year: "2018", 
@@ -26,17 +32,11 @@ const Timeline = () => {
       highlight: "We secured 5th rank Worldwide and 1st among all Indian teams.",
     },
     {
-      year: "2017",
-      title: "AUVSI SUAS 2017", 
-      description: "We participated for the second time in competition with our new drone SkyKing'17. 56 teams from all across the globe participated.",
-      highlight: "We secured a Mission Rank 28 at the competition.",
-    },
-    {
       year: "2016",
       title: "AUVSI SUAS 2016",
       description: "We participated in the AUVSI SUAS 2016 competition held in Maryland, USA with our drone Scylla 2K16.",
       highlight: "We secured a Mission Rank 5 at the competition and 3rd among all Indian Teams.",
-    }
+    },
   ];
 
   useEffect(() => {
