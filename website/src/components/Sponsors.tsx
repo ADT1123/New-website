@@ -286,7 +286,7 @@ const Sponsors = () => {
             <button
               onClick={() => {
                 const link = document.createElement('a');
-                link.href = '/documents/sponsorship-brochure.pdf';
+                link.href = '/img/UAS-SPONSORSHIP-BROCHURE.pdf';
                 link.download = '';
                 document.body.appendChild(link);
                 link.click();
