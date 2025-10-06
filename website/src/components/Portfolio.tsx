@@ -17,10 +17,9 @@ const Portfolio = () => {
   // Partner logos data unchanged
   const partnerLogos = [
     { src: '/logo-Photoroom.png', alt: 'Team UAS NMIMS', href: '#' },
-    { src: '/img/NMIMS_LOGO4.png', title: 'NMIMS University' },
-    { src: '/img/Solidworks2.png', title: 'AUVSI Competition' },
-    { src: '/img/Ansys1.png', title: 'DRDO Partner' },
-    { src: '/logo-Photoroom.png', title: 'IEEE' }
+    { src: '/img/NMIMS_LOGO4.png', title: 'NMIMS University',href: 'https://www.nmims.edu' },
+    { src: '/img/Solidworks2.png', title: 'SolidWorks',href: 'https://www.Solidworks.com' },
+    { src: '/img/Ansys1.png', title: 'Ansys', href: 'https://www.ansys.com' },
   ];
 
   useEffect(() => {

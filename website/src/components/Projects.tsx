@@ -22,7 +22,7 @@ const Projects = () => {
     },
     {
       id: 2,
-      title: "VTOL",
+      title: "VISON",
       description:
         "Many Industries are shifting towards VTOL because of its speed like aircraft and hovering capacity to that of multirotor providing benefits of both.",
       image: "/img/VTOL1.png",
@@ -55,7 +55,7 @@ const Projects = () => {
       title: "MTD",
       description:
         "MTD is basic fixed wing designed to carry payload upto 3kgs and click high quality images with endurance upto 30 mins",
-      image: "/img/MTD.jpg",
+      image: "/img/MTD1.jpg",
       category: "System",
       learnMoreUrl:
         "https://drive.google.com/open?id=1o_yZYhDHwxwdOPTK9AyDE-TnO9Af5hDj",
@@ -81,16 +81,15 @@ const Projects = () => {
         image: "/img/HEX1.jpg",
         category: "Vehicle",
         specs: {
-          maxPayload: "5.2 kg",
+          maxPayload: "5-6 kg",
           flightTime: "35 minutes",
-          maxSpeed: "65 km/h",
+          maxSpeed: "40 km/h",
           features: [
             "RTK GNSS positioning",
             "360° obstacle sensing",
-            "Dual IMU redundancy",
             "Quick‑release payload",
-            "Real‑time health telemetry",
-            "Auto RTH & geofencing"
+            "Aerial Mapping",
+            "Package delivery"
           ]
         }
       },
@@ -107,8 +106,6 @@ const Projects = () => {
           features: [
             "VTOL, waypoint missions",
             "Auto takeoff/landing",
-            "PPK/RTK mapping ready",
-            "Live 1080p video link",
             "Encrypted C2/telemetry",
             "Weather-resistant airframe"
           ]
@@ -121,16 +118,13 @@ const Projects = () => {
         image: "/img/Priya.jpg",
         category: "Vehicle",
         specs: {
-          maxPayload: "3.5 kg",
-          flightTime: "42 minutes",
+          maxPayload: "1-2 kg",
+          flightTime: "12 minutes",
           maxSpeed: "58 km/h",
           features: [
-            "3‑axis 4K gimbal",
-            "Interchangeable payloads",
-            "AI detect & track",
-            "Precision spraying kit",
+            "FPV Racing",
+            "Aerial Photography",
             "Terrain following",
-            "Low-noise propellers"
           ]
         }
       },
@@ -141,16 +135,16 @@ const Projects = () => {
         image: "/img/Reptile.png",
         category: "Vehicle",
         specs: {
-          maxPayload: "15 kg",
-          flightTime: "8 hours",
+          maxPayload: "1-2 kg",
+          flightTime: "15 minutes",
           maxSpeed: "25 km/h",
           features: [
             "All-terrain suspension",
-            "Modular payload bay",
+            "Wildlife monitoring",
             "Remote & autonomous modes",
-            "Night vision + LiDAR",
-            "Obstacle avoidance",
-            "Hot-swappable battery"
+            "Cinematography",
+            "Infrastructure inspection",
+            "Search and rescue"
           ]
         }
       }

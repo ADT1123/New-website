@@ -16,25 +16,28 @@ const Timeline = () => {
       title: "Boeing National Aeromodelling Competition, IIT Bombay (2024–25)",
       description: "Achieved 2nd place in the Zonal Round, showcasing technica innovation, teamwork, and precision in aeromodelling. Advanced to the National Finale, where the team was among the Top 12 in India to represent at IIT Bombay.",
       highlight: "2nd Place in Zonal Round, Top 12 National Finalists",
-      logo: "/img/NMIMS_LOGO1.png"
+      logo: "/img/Techfest.jpeg"
     },
     {
       year: "2023",
       title: "Drone Log Competition, IIT Bombay Techfest",
       description: "Secured 2nd position in this national-level event focused on warehouse management using drones. The challenge tested our ability to design and operate drones for tasks such as payload handling, precision navigation, and efficient logistics execution",
       highlight: "2nd Place Nationally among 30+ Teams",
+      logo: "/img/Techfest.jpeg"
     },
     {
       year: "2018",
       title: "AUVSI SUAS 2018",
       description: "We participated for the third time in the 16th AUVSI SUAS 2018 with our hexa-copter. Over 75 teams from all across the globe participated.",
       highlight: "We secured 5th rank Worldwide and 1st among all Indian teams.",
+      logo: "/img/SUAS.jpeg"
     },
     {
       year: "2016",
       title: "AUVSI SUAS 2016",
       description: "We participated in the AUVSI SUAS 2016 competition held in Maryland, USA with our drone Scylla 2K16.",
       highlight: "We secured a Mission Rank 5 at the competition and 3rd among all Indian Teams.",
+      logo: "/img/SUAS.jpeg"
     },
   ]; // unchanged content [memory:1]
 
