@@ -73,84 +73,88 @@ const Projects = () => {
   ];
 
   // Vehicles Data
-  const vehicles = [
-    {
-      id: 7,
-      title: "Hex",
-      description:
-        "Advanced multi-rotor platform for heavy payload delivery and surveillance missions",
-      image: "/img/HEX1.jpg",
-      category: "Vehicle",
-      specs: {
-        maxPayload: "5.2 kg",
-        flightTime: "35 minutes",
-        maxSpeed: "65 km/h",
-        features: [
-          "GPS Navigation",
-          "Obstacle Avoidance",
-          "Auto Return",
-          "Real-time Telemetry",
-        ],
+    const vehicles = [
+      {
+        id: 7,
+        title: "Hex",
+        description: "Heavy‑lift hexacopter for payload delivery and ISR missions with stable flight and safety redundancies",
+        image: "/img/HEX1.jpg",
+        category: "Vehicle",
+        specs: {
+          maxPayload: "5.2 kg",
+          flightTime: "35 minutes",
+          maxSpeed: "65 km/h",
+          features: [
+            "RTK GNSS positioning",
+            "360° obstacle sensing",
+            "Dual IMU redundancy",
+            "Quick‑release payload",
+            "Real‑time health telemetry",
+            "Auto RTH & geofencing"
+          ]
+        }
       },
-    },
-    {
-      id: 8,
-      title: "Pawan",
-      description:
-        "Long-range surveillance and mapping drone with extended flight capabilities",
-      image: "/img/Pawan.png",
-      category: "Vehicle",
-      specs: {
-        maxPayload: "2.8 kg",
-        flightTime: "120 minutes",
-        maxSpeed: "95 km/h",
-        features: [
-          "Auto Takeoff/Landing",
-          "Waypoint Navigation",
-          "Live Video Stream",
-          "Weather Resistant",
-        ],
+      {
+        id: 8,
+        title: "Pawan",
+        description: "Long-range VTOL platform for surveillance and mapping with extended endurance and efficient cruise",
+        image: "/img/Pawan.png",
+        category: "Vehicle",
+        specs: {
+          maxPayload: "2.8 kg",
+          flightTime: "120 minutes",
+          maxSpeed: "95 km/h",
+          features: [
+            "VTOL, waypoint missions",
+            "Auto takeoff/landing",
+            "PPK/RTK mapping ready",
+            "Live 1080p video link",
+            "Encrypted C2/telemetry",
+            "Weather-resistant airframe"
+          ]
+        }
       },
-    },
-    {
-      id: 9,
-      title: "Priya",
-      description:
-        "Fast Versatile for aerial photography and precision applications",
-      image: "/img/Priya.jpg",
-      category: "Vehicle",
-      specs: {
-        maxPayload: "3.5 kg",
-        flightTime: "42 minutes",
-        maxSpeed: "58 km/h",
-        features: [
-          "4K Camera Gimbal",
-          "Precision Spraying",
-          "Crop Monitoring",
-          "AI Object Detection",
-        ],
+      {
+        id: 9,
+        title: "Priya",
+        description: "Fast, versatile quadcopter for aerial imaging and precision applications with interchangeable payloads",
+        image: "/img/Priya.jpg",
+        category: "Vehicle",
+        specs: {
+          maxPayload: "3.5 kg",
+          flightTime: "42 minutes",
+          maxSpeed: "58 km/h",
+          features: [
+            "3‑axis 4K gimbal",
+            "Interchangeable payloads",
+            "AI detect & track",
+            "Precision spraying kit",
+            "Terrain following",
+            "Low-noise propellers"
+          ]
+        }
       },
-    },
-    {
-      id: 10,
-      title: "Reptile",
-      description:
-        "Autonomous Unmanned aerial vehicle for last-mile delivery and inspection tasks",
-      image: "/img/Reptile.png",
-      category: "Vehicle",
-      specs: {
-        maxPayload: "15 kg",
-        flightTime: "8 hours",
-        maxSpeed: "25 km/h",
-        features: [
-          "All-Terrain Mobility",
-          "Remote Operation",
-          "Modular Payload",
-          "Night Vision",
-        ],
-      },
-    },
-  ];
+      {
+        id: 10,
+        title: "Reptile",
+        description: "Autonomous unmanned ground vehicle for last‑mile delivery and industrial inspection with day/night capability",
+        image: "/img/Reptile.png",
+        category: "Vehicle",
+        specs: {
+          maxPayload: "15 kg",
+          flightTime: "8 hours",
+          maxSpeed: "25 km/h",
+          features: [
+            "All-terrain suspension",
+            "Modular payload bay",
+            "Remote & autonomous modes",
+            "Night vision + LiDAR",
+            "Obstacle avoidance",
+            "Hot-swappable battery"
+          ]
+        }
+      }
+    ];
 
   useEffect(() => {
     // Inject global navy background + component styles locally

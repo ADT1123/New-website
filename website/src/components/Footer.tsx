@@ -129,8 +129,8 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="text-white font-medium">Atharva Sharma (Captain)</p>
-                    <a className="text-white/70 hover:text-blue-400 transition-colors duration-300">
-                      email
+                    <a href="mailto:atharva.uas@gmail.com" className="text-white/70 hover:text-blue-400 transition-colors duration-300">
+                      atharva.uas@gmail.com
                     </a>
                   </div>
                 </div>
@@ -144,8 +144,8 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="text-white font-medium">Mahak Sharma (Vice-Captain)</p>
-                    <a className="text-white/70 hover:text-purple-400 transition-colors duration-300">
-                      email
+                    <a href="mailto:mahak.uas@gmail.com" className="text-white/70 hover:text-purple-400 transition-colors duration-300">
+                      mahak.uas@gmail.com
                     </a>
                   </div>
                 </div>
@@ -158,6 +158,7 @@ const Footer = () => {
                     <Envelope size={20} className="text-white/80" />
                   </div>
                   <div>
+                    <p className="text-white font-medium">Email us at: </p>
                     <a href="mailto:uasnmims@gmail.com" className="text-white/70 hover:text-white transition-colors duration-300 font-medium">
                       uasnmims@gmail.com
                     </a>
