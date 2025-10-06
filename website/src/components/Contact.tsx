@@ -26,7 +26,7 @@ const Contact = () => {
 
   // Team and contact data
   const teamInfo = {
-    title: " Team UAS NMIMS",
+    title: " TEAM UAS NMIMS",
     subtitle: "Innovating the future of drone technology",
     teamPhoto: "/img/portfolio/thumbnails/img21.jpg", // Replace with your actual team photo
   };
