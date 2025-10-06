@@ -614,11 +614,11 @@ const Timeline = () => {
   );
 };
 
-// ---- Wrapper that mounts both in-order with ONE common background; export name About ----
+// ---- Wrapper that mounts both in-order with ONE common background + tighter seam; export name About ----
 const About = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Unified background applied once for About + Timeline, while disabling child backgrounds
+  // Unified background applied once for About + Timeline, while disabling child backgrounds and tightening the seam
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -627,21 +627,27 @@ const About = () => {
         overflow: hidden;
         isolation: isolate;
       }
-      /* Base shared navy gradient with subtle drift */
+      /* Base shared navy gradient with extra black vignettes and subtle drift */
       .about-unified-bg::before {
         content: "";
         position: absolute;
         inset: -10%;
         z-index: 0;
         background:
+          /* deep navy field */
           radial-gradient(1200px 900px at 20% 10%, #000000 0%, #070d18 35%, #000000 60%, #0d1423 100%),
+          /* soft navy clouds */
           radial-gradient(600px 600px at 70% 20%, rgba(10, 11, 13, 0.10), transparent 60%),
-          radial-gradient(520px 520px at 25% 75%, rgba(8, 11, 16, 0.10), transparent 60%);
+          radial-gradient(520px 520px at 25% 75%, rgba(8, 11, 16, 0.10), transparent 60%),
+          /* black vignettes for depth */
+          radial-gradient(900px 700px at -10% 0%, rgba(0,0,0,0.35), transparent 60%),
+          radial-gradient(900px 700px at 110% 100%, rgba(0,0,0,0.28), transparent 60%),
+          linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.05) 45%, rgba(0,0,0,0.25));
         filter: blur(22px);
         animation: drift 16s ease-in-out infinite alternate;
         pointer-events: none;
       }
-      /* Shared tint + twinkle particles */
+      /* Shared tint + twinkle particles with slight black vignette */
       .about-unified-bg::after {
         content: "";
         position: absolute;
@@ -656,25 +662,27 @@ const About = () => {
           radial-gradient(1.5px 1.5px at 42% 76%, rgba(255,255,255,0.06), transparent 60%),
           radial-gradient(1px 1px at 14% 72%, rgba(255,255,255,0.07), transparent 60%),
           radial-gradient(1px 1px at 86% 36%, rgba(255,255,255,0.06), transparent 60%),
-          radial-gradient(1100px 750px at 50% 12%, rgba(0,0,0,0.26), transparent 60%),
-          linear-gradient(to bottom, rgba(0,0,0,0.32), rgba(0,0,0,0.22) 30%, rgba(0,0,0,0.34));
+          /* top/bottom black tint */
+          linear-gradient(to bottom, rgba(0,0,0,0.30), rgba(0,0,0,0.18) 30%, rgba(0,0,0,0.30)),
+          /* side vignettes */
+          linear-gradient(to right, rgba(0,0,0,0.18), transparent 20%, transparent 80%, rgba(0,0,0,0.18));
         animation: twinkle 7s ease-in-out infinite alternate;
       }
 
       /* Disable individual section backgrounds so the wrapper background is the only one */
-      .about-unified-bg .navy-bg {
-        background: transparent !important;
-      }
+      .about-unified-bg .navy-bg { background: transparent !important; }
       .about-unified-bg .navy-bg::before,
-      .about-unified-bg .navy-bg::after {
-        display: none !important;
-      }
+      .about-unified-bg .navy-bg::after { display: none !important; }
 
       /* Ensure section content paints above the shared background */
-      .about-unified-bg .navy-bg > * {
-        position: relative;
-        z-index: 1;
-      }
+      .about-unified-bg .navy-bg > * { position: relative; z-index: 1; }
+
+      /* Tighten seam between About and Timeline without touching component code */
+      .about-unified-bg #about { padding-bottom: clamp(12px, 2.5vw, 28px) !important; }
+      .about-unified-bg #Timeline { padding-top: clamp(8px, 2vw, 22px) !important; margin-top: -6px; }
+
+      /* Optional: slightly pull seam glow closer */
+      .about-unified-bg .seam-timeline { top: -6vh; }
 
       /* Keyframes (shared) */
       @keyframes drift {
@@ -691,6 +699,7 @@ const About = () => {
       @media (max-width: 768px) {
         .about-unified-bg::before { filter: blur(26px); animation-duration: 20s; }
         .about-unified-bg::after { opacity: 0.38; animation-duration: 9s; }
+        .about-unified-bg #Timeline { margin-top: -4px; }
       }
 
       /* Respect reduced motion */
