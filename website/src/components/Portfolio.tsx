@@ -103,6 +103,10 @@ const Portfolio = () => {
             <About />
           </section>
 
+          <section id="Timeline">
+            <Timeline />
+          </section>
+
           {/* Partners Section with LogoLoop */}
           <section className="py-20 bg-black relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 relative z-10">
