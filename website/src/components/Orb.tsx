@@ -2,11 +2,13 @@ import { useRef, useEffect } from 'react';
 import { Renderer, Program, Mesh, Triangle, Vec2 } from 'ogl';
 import './Orb.css';
 
+// Vertex shader
 const vertex = `
 attribute vec2 position;
 void main(){gl_Position=vec4(position,0.0,1.0);}
 `;
 
+// Fragment shader (unchanged except driven via hueShift uniform)
 const fragment = `
 #ifdef GL_ES
 precision lowp float;
@@ -31,12 +33,15 @@ vec3 hueShiftRGB(vec3 col,float deg){
     vec3 yiq=rgb2yiq*col;
     float rad=radians(deg);
     float cosh=cos(rad),sinh=sin(rad);
-    vec3 yiqShift=vec3(yiq.x,yiq.y*cosh-yiq.z*sinh,yiq.y*sinh+yiq.z*cosh);
+    vec3 yiqShift=vec3(yiq.x,yiq.y*cosh-yiq.z*sinh,yiq.y+sinh*yiq.z+yiq.z*cosh*0.0);
+    yiqShift = vec3(yiq.x, yiq.y*cosh - yiq.z*sinh, yiq.y*sinh + yiq.z*cosh);
     return clamp(yiq2rgb*yiqShift,0.0,1.0);
 }
 
 vec4 sigmoid(vec4 x){return 1./(1.+exp(-x));}
 
+// cppn_fn omitted for brevity in this comment, but keep exactly as provided by you
+// BEGIN original cppn_fn
 vec4 cppn_fn(vec2 coordinate,float in0,float in1,float in2){
     buf[6]=vec4(coordinate.x,coordinate.y,0.3948333106474662+in0,0.36+in1);
     buf[7]=vec4(0.14+in2,sqrt(coordinate.x*coordinate.x+coordinate.y*coordinate.y),0.,0.);
@@ -56,6 +61,7 @@ vec4 cppn_fn(vec2 coordinate,float in0,float in1,float in2){
     buf[0]=sigmoid(buf[0]);
     return vec4(buf[0].x,buf[0].y,buf[0].z,1.);
 }
+// END original cppn_fn
 
 void mainImage(out vec4 fragColor,in vec2 fragCoord){
     vec2 uv=fragCoord/uResolution.xy*2.-1.;
@@ -74,19 +80,32 @@ void main(){
 }
 `;
 
+type Props = {
+  hueShift?: number;
+  noiseIntensity?: number;
+  scanlineIntensity?: number;
+  speed?: number;
+  scanlineFrequency?: number;
+  warpAmount?: number;
+  resolutionScale?: number;
+  className?: string;
+};
+
 export default function DarkVeil({
-  hueShift = 0,
-  noiseIntensity = 0,
-  scanlineIntensity = 0,
+  hueShift = 225,            // navy by default
+  noiseIntensity = 0.035,    // subtle film grain
+  scanlineIntensity = 0.045, // very soft scanlines
   speed = 0.5,
-  scanlineFrequency = 0,
-  warpAmount = 0,
-  resolutionScale = 1
-}) {
-  const ref = useRef(null);
+  scanlineFrequency = 0.12,
+  warpAmount = 0.06,
+  resolutionScale = 1,
+  className = ""
+}: Props) {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+
   useEffect(() => {
-    const canvas = ref.current;
-    const parent = canvas.parentElement;
+    const canvas = ref.current!;
+    const parent = canvas.parentElement as HTMLElement;
 
     const renderer = new Renderer({
       dpr: Math.min(window.devicePixelRatio, 2),
@@ -95,7 +114,6 @@ export default function DarkVeil({
 
     const gl = renderer.gl;
     const geometry = new Triangle(gl);
-
     const program = new Program(gl, {
       vertex,
       fragment,
@@ -109,12 +127,11 @@ export default function DarkVeil({
         uWarp: { value: warpAmount }
       }
     });
-
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
-      const w = parent.clientWidth,
-        h = parent.clientHeight;
+      const w = parent.clientWidth;
+      const h = parent.clientHeight;
       renderer.setSize(w * resolutionScale, h * resolutionScale);
       program.uniforms.uResolution.value.set(w, h);
     };
@@ -124,7 +141,6 @@ export default function DarkVeil({
 
     const start = performance.now();
     let frame = 0;
-
     const loop = () => {
       program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed;
       program.uniforms.uHueShift.value = hueShift;
@@ -135,13 +151,14 @@ export default function DarkVeil({
       renderer.render({ scene: mesh });
       frame = requestAnimationFrame(loop);
     };
-
     loop();
 
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
+      // no renderer.dispose in ogl; GC handles when canvas removed
     };
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
-  return <canvas ref={ref} className="darkveil-canvas" />;
+
+  return <canvas ref={ref} className={`darkveil-canvas ${className}`} />;
 }

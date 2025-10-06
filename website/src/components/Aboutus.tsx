@@ -149,11 +149,11 @@ const AboutUltra = () => {
         {/* Minimal stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
           <div className="about-card p-5 text-center">
-            <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="11">0</div>
+            <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="8">0</div>
             <div className="text-white/70 text-xs mt-1">Competitions Won</div>
           </div>
           <div className="about-card p-5 text-center">
-            <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="28">0</div>
+            <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="13">0</div>
             <div className="text-white/70 text-xs mt-1">Vehicles Built</div>
           </div>
           <div className="about-card p-5 text-center">

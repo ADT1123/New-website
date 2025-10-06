@@ -157,7 +157,7 @@ const Navigation = () => {
               className="group flex items-center space-x-3 z-10"
             >
               <img 
-                src="/img/LOGO5.png" 
+                src="/img/logo-Photoroom.png" 
                 alt="Team UAS Logo" 
                 className="h-16 md:h-16 transition-transform duration-300 group-hover:scale-110" 
               />

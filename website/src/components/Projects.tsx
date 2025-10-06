@@ -17,7 +17,7 @@ const Projects = () => {
       title: "PLSLM",
       description:
         "Precision Location Soft Landing Mechanism: Used for Precision Landing irrespective of the surface protecting Drone as well as payload",
-      image: "/img/Hexa1.jpg",
+      image: "/img/Hexa.jpg",
       category: "Research",
     },
     {
@@ -133,10 +133,10 @@ const Projects = () => {
     },
     {
       id: 10,
-      title: "Ground Rover Alpha",
+      title: "Reptile",
       description:
-        "All-terrain autonomous ground vehicle for last-mile delivery and inspection tasks",
-      image: "/img/UGV.jpg",
+        "Autonomous Unmanned aerial vehicle for last-mile delivery and inspection tasks",
+      image: "/img/Reptile.png",
       category: "Vehicle",
       specs: {
         maxPayload: "15 kg",

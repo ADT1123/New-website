@@ -94,14 +94,14 @@ const Hero = () => {
       {/* WebGL Orb Background - Full coverage */}
       <div className="absolute inset-0 w-full h-full min-w-full min-h-full">
         <Orb 
-          hueShift={240} // Blue-purple hue for tech feel
+          hueShift={1} // Blue-purple hue for tech feel
         />
       </div>
 
       {/* Optional: Add multiple orbs for layered effect */}
       <div className="absolute inset-0 w-full h-full min-w-full min-h-full opacity-30">
         <Orb 
-          hueShift={180} // Cyan hue
+          hueShift={10} // Cyan hue
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none" />
       </div>
