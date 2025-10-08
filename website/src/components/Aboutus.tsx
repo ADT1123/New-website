@@ -86,6 +86,35 @@ const AboutUltra = () => {
           scrollTrigger: { trigger: ".cards-grid", start: "top 85%", toggleActions: "play none none none" }
         }
       );
+
+      // Objectives header animation
+      gsap.fromTo(
+        ".objectives-header",
+        { opacity: 0, y: 20, filter: "blur(8px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 1.1 * mult,
+          ease: "power2.out",
+          scrollTrigger: { trigger: ".objectives-section", start: "top 85%", toggleActions: "play none none none" }
+        }
+      );
+
+      // Objectives cards animation
+      gsap.fromTo(
+        ".objective-card",
+        { opacity: 0, y: 30, scale: 0.965 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.0 * mult,
+          ease: "power2.out",
+          stagger: 0.15,
+          scrollTrigger: { trigger: ".objectives-section", start: "top 80%", toggleActions: "play none none none" }
+        }
+      );
     }, rootRef);
 
     return () => ctx.revert();
@@ -124,21 +153,21 @@ const AboutUltra = () => {
           </p>
         </div>
 
-        {/* Focus cards */}
+        {/* Focus cards (subtle visual polish only) */}
         <div className="cards-grid grid md:grid-cols-3 gap-6 mt-12">
-          <div className="about-card p-6">
+          <div className="about-card p-6 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-[2px] hover:bg-white/[0.04] transition-all duration-300">
             <h3 className="text-white text-lg font-semibold">Hands‑on Builds</h3>
             <p className="text-white/75 mt-2 text-sm">
               Airframes, avionics, propulsion and autonomy tightly integrated with rigorous testing loops.
             </p>
           </div>
-          <div className="about-card p-6">
+          <div className="about-card p-6 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-[2px] hover:bg-white/[0.04] transition-all duration-300">
             <h3 className="text-white text-lg font-semibold">Applied Research</h3>
             <p className="text-white/75 mt-2 text-sm">
               Perception, guidance, mission planning and safety systems mapped to field outcomes.
             </p>
           </div>
-          <div className="about-card p-6">
+          <div className="about-card p-6 rounded-xl border border-white/10 bg-white/[0.02] backdrop-blur-[2px] hover:bg-white/[0.04] transition-all duration-300">
             <h3 className="text-white text-lg font-semibold">Real Missions</h3>
             <p className="text-white/75 mt-2 text-sm">
               Waypoints, payload ops, autonomous detection and reliable delivery workflows.
@@ -146,25 +175,76 @@ const AboutUltra = () => {
           </div>
         </div>
 
-        {/* Minimal stats row */}
+        {/* Minimal stats row (subtle visual polish only) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-          <div className="about-card p-5 text-center">
+          <div className="about-card p-5 text-center rounded-xl border border-white/8 bg-white/[0.015] backdrop-blur-[2px]">
             <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="8">0</div>
             <div className="text-white/70 text-xs mt-1">Competitions Won</div>
           </div>
-          <div className="about-card p-5 text-center">
+          <div className="about-card p-5 text-center rounded-xl border border-white/8 bg-white/[0.015] backdrop-blur-[2px]">
             <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="13">0</div>
             <div className="text-white/70 text-xs mt-1">Vehicles Built</div>
           </div>
-          <div className="about-card p-5 text-center">
+          <div className="about-card p-5 text-center rounded-xl border border-white/8 bg-white/[0.015] backdrop-blur-[2px]">
             <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="750">0</div>
             <div className="text-white/70 text-xs mt-1">Flights Logged</div>
           </div>
-          <div className="about-card p-5 text-center">
+          <div className="about-card p-5 text-center rounded-xl border border-white/8 bg-white/[0.015] backdrop-blur-[2px]">
             <div className="stat text-3xl md:text-4xl font-semibold text-white" data-target="520">0</div>
             <div className="text-white/70 text-xs mt-1">Flight Hours</div>
           </div>
         </div>
+
+        {/* Mission & Objectives (emoji-free) */}
+        <div className="objectives-section mt-20">
+          <h3 className="objectives-header text-2xl md:text-3xl font-light text-white/90 mb-8">
+            Our Mission & Objectives
+            <span className="block h-[1px] w-24 mt-2 bg-gradient-to-r from-[rgba(255,140,20,0.6)] to-transparent"></span>
+          </h3>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* R&D Focus */}
+            <div className="objective-card p-6 rounded-xl border border-white/8 bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-[2px] hover:from-white/[0.05] hover:to-white/[0.02] transition-all duration-500">
+              <h4 className="text-white font-medium text-lg mb-3">R&D in Drone Tech</h4>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Team UAS NMIMS specializes in drone technology and has been conducting extensive research and development.
+              </p>
+            </div>
+
+            {/* Technology Learning */}
+            <div className="objective-card p-6 rounded-xl border border-white/8 bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-[2px] hover:from-white/[0.05] hover:to-white/[0.02] transition-all duration-500">
+              <h4 className="text-white font-medium text-lg mb-3">Technology Learning</h4>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Provide members with opportunities to learn about drone technology, including building, programming, and piloting drones.
+              </p>
+            </div>
+
+            {/* Innovation */}
+            <div className="objective-card p-6 rounded-xl border border-white/8 bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-[2px] hover:from-white/[0.05] hover:to-white/[0.02] transition-all duration-500">
+              <h4 className="text-white font-medium text-lg mb-3">Innovation & Applications</h4>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Encourage members to innovate and create new applications for drones in photography, agriculture, and search and rescue.
+              </p>
+            </div>
+
+            {/* Competitions */}
+            <div className="objective-card p-6 rounded-xl border border-white/8 bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-[2px] hover:from-white/[0.05] hover:to-white/[0.02] transition-all duration-500">
+              <h4 className="text-white font-medium text-lg mb-3">Competitions & Challenges</h4>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Participate in drone competitions and challenges to foster a spirit of friendly competition and continuous improvement.
+              </p>
+            </div>
+
+            {/* Collaboration */}
+            <div className="objective-card p-6 rounded-xl border border-white/8 bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-[2px] hover:from-white/[0.05] hover:to-white/[0.02] transition-all duration-500 md:col-span-2 lg:col-span-1">
+              <h4 className="text-white font-medium text-lg mb-3">Network & Collaborate</h4>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Provide a platform for members to network, share ideas, and collaborate on projects.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );

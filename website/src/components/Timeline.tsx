@@ -208,7 +208,7 @@ const Timeline = () => {
       id="Timeline"
     >
       {/* Seam mirror at top-right to connect from About */}
-      <div className="seam-anchor seam-timeline" aria-hidden="true"></div>
+    <div className="seam-anchor seam-timeline" aria-hidden="true"></div>
 
       {/* Soft edges tuned for navy */}
       <div className="absolute inset-0 pointer-events-none z-0">

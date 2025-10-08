@@ -102,9 +102,6 @@ const Portfolio = () => {
             <About />
           </section>
 
-          <section id="Timeline">
-            <Timeline />
-          </section>
 
           {/* Partners Section with LogoLoop */}
           <section className="py-20 bg-black relative overflow-hidden">
